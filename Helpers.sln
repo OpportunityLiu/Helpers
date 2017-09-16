@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opportunity.Helpers", "Opportunity.Helpers\Opportunity.Helpers.csproj", "{A0B6EFBB-A59C-4E99-95EE-9342EDD13A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opportunity.Helpers", "Opportunity.Helpers\Opportunity.Helpers.csproj", "{A0B6EFBB-A59C-4E99-95EE-9342EDD13A8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opportunity.Helpers.Test", "Opportunity.Helpers.Test\Opportunity.Helpers.Test.csproj", "{C3588D3B-93C1-4758-B6CF-B5AFA6F1848C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A0B6EFBB-A59C-4E99-95EE-9342EDD13A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0B6EFBB-A59C-4E99-95EE-9342EDD13A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0B6EFBB-A59C-4E99-95EE-9342EDD13A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3588D3B-93C1-4758-B6CF-B5AFA6F1848C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3588D3B-93C1-4758-B6CF-B5AFA6F1848C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3588D3B-93C1-4758-B6CF-B5AFA6F1848C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3588D3B-93C1-4758-B6CF-B5AFA6F1848C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
