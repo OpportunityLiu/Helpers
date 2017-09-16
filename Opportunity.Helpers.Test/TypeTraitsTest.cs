@@ -13,10 +13,12 @@ namespace Opportunity.Helpers.Test
         public void TestClass()
         {
             var t = typeof(object);
-            Assert.AreEqual(t, TypeTraits<object>.Type);
-            Assert.AreEqual(null, TypeTraits<object>.NullableUnderlyingType);
-            Assert.AreEqual(false, TypeTraits<object>.IsNullable);
-            Assert.AreEqual(true, TypeTraits<object>.Type.IsClass);
+            var tt = TypeTraits.Of(t);
+            var tt2 = TypeTraits.Of<object>();
+            Assert.AreEqual(tt, tt2);
+            Assert.AreEqual(t, tt.Type);
+            Assert.AreEqual(null, tt.NullableUnderlyingType);
+            Assert.AreEqual(default(object), tt.Default);
         }
 
         [TestMethod]
@@ -24,24 +26,30 @@ namespace Opportunity.Helpers.Test
         {
             {
                 var t = typeof(int?);
-                Assert.AreEqual(t, TypeTraits<int?>.Type);
-                Assert.AreEqual(typeof(int), TypeTraits<int?>.NullableUnderlyingType);
-                Assert.AreEqual(true, TypeTraits<int?>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<int?>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<int?>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(typeof(int), tt.NullableUnderlyingType);
+                Assert.AreEqual(default(int?), tt.Default);
             }
             {
                 var t = typeof(StringComparison?);
-                Assert.AreEqual(t, TypeTraits<StringComparison?>.Type);
-                Assert.AreEqual(typeof(StringComparison), TypeTraits<StringComparison?>.NullableUnderlyingType);
-                Assert.AreEqual(true, TypeTraits<StringComparison?>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<StringComparison?>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<StringComparison?>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(typeof(StringComparison), tt.NullableUnderlyingType);
+                Assert.AreEqual(default(StringComparison?), tt.Default);
             }
             {
                 var t = typeof(DateTime?);
-                Assert.AreEqual(t, TypeTraits<DateTime?>.Type);
-                Assert.AreEqual(typeof(DateTime), TypeTraits<DateTime?>.NullableUnderlyingType);
-                Assert.AreEqual(true, TypeTraits<DateTime?>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<DateTime?>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<DateTime?>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(typeof(DateTime), tt.NullableUnderlyingType);
+                Assert.AreEqual(default(DateTime?), tt.Default);
             }
         }
 
@@ -50,38 +58,48 @@ namespace Opportunity.Helpers.Test
         {
             {
                 var t = typeof(int);
-                Assert.AreEqual(t, TypeTraits<int>.Type);
-                Assert.AreEqual(null, TypeTraits<int>.NullableUnderlyingType);
-                Assert.AreEqual(false, TypeTraits<int>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<int>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<int>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(default(int), tt.Default);
             }
             {
                 var t = typeof(byte);
-                Assert.AreEqual(t, TypeTraits<byte>.Type);
-                Assert.AreEqual(null, TypeTraits<byte>.NullableUnderlyingType);
-                Assert.AreEqual(false, TypeTraits<byte>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<byte>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<byte>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(default(byte), tt.Default);
             }
             {
                 var t = typeof(double);
-                Assert.AreEqual(t, TypeTraits<double>.Type);
-                Assert.AreEqual(null, TypeTraits<double>.NullableUnderlyingType);
-                Assert.AreEqual(false, TypeTraits<double>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<double>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<double>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(default(double), tt.Default);
             }
             {
                 var t = typeof(decimal);
-                Assert.AreEqual(t, TypeTraits<decimal>.Type);
-                Assert.AreEqual(null, TypeTraits<decimal>.NullableUnderlyingType);
-                Assert.AreEqual(false, TypeTraits<decimal>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<decimal>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<decimal>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(default(decimal), tt.Default);
             }
             {
                 var t = typeof(char);
-                Assert.AreEqual(t, TypeTraits<char>.Type);
-                Assert.AreEqual(null, TypeTraits<char>.NullableUnderlyingType);
-                Assert.AreEqual(false, TypeTraits<char>.IsNullable);
-                Assert.AreEqual(false, TypeTraits<char>.Type.IsClass);
+                var tt = TypeTraits.Of(t);
+                var tt2 = TypeTraits.Of<char>();
+                Assert.AreEqual(tt, tt2);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(default(char), tt.Default);
             }
         }
 
@@ -89,20 +107,24 @@ namespace Opportunity.Helpers.Test
         public void TestEnum()
         {
             var t = typeof(StringComparison);
-            Assert.AreEqual(t, TypeTraits<StringComparison>.Type);
-            Assert.AreEqual(null, TypeTraits<StringComparison>.NullableUnderlyingType);
-            Assert.AreEqual(false, TypeTraits<StringComparison>.IsNullable);
-            Assert.AreEqual(false, TypeTraits<StringComparison>.Type.IsClass);
+            var tt = TypeTraits.Of(t);
+            var tt2 = TypeTraits.Of<StringComparison>();
+            Assert.AreEqual(tt, tt2);
+            Assert.AreEqual(t, tt.Type);
+            Assert.AreEqual(null, tt.NullableUnderlyingType);
+            Assert.AreEqual(default(StringComparison), tt.Default);
         }
 
         [TestMethod]
         public void TestStruct()
         {
             var t = typeof(DateTime);
-            Assert.AreEqual(t, TypeTraits<DateTime>.Type);
-            Assert.AreEqual(null, TypeTraits<DateTime>.NullableUnderlyingType);
-            Assert.AreEqual(false, TypeTraits<DateTime>.IsNullable);
-            Assert.AreEqual(false, TypeTraits<DateTime>.Type.IsClass);
+            var tt = TypeTraits.Of(t);
+            var tt2 = TypeTraits.Of<DateTime>();
+            Assert.AreEqual(tt, tt2);
+            Assert.AreEqual(t, tt.Type);
+            Assert.AreEqual(null, tt.NullableUnderlyingType);
+            Assert.AreEqual(default(DateTime), tt.Default);
         }
     }
 }
