@@ -149,6 +149,8 @@ namespace System
 
         public static ulong ToUInt64(this Enum that)
         {
+            if (that == null)
+                throw new ArgumentNullException(nameof(that));
             var c = (IConvertible)that;
             switch (c.GetTypeCode())
             {
