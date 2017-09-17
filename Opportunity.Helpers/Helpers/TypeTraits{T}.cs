@@ -11,10 +11,10 @@ namespace Opportunity.Helpers
         {
             Type = type.GetTypeInfo();
             NullableUnderlyingType = Nullable.GetUnderlyingType(type)?.GetTypeInfo();
-            if (Type.IsClass || NullableUnderlyingType != null)
-                Default = null;
-            else
+            if (Type.IsValueType && NullableUnderlyingType == null && !Type.ContainsGenericParameters)
                 Default = Activator.CreateInstance(type);
+            else
+                Default = null;
         }
 
         public bool Equals(TypeTraitsInfo other) => this == other;

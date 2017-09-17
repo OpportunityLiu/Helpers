@@ -126,5 +126,43 @@ namespace Opportunity.Helpers.Test
             Assert.AreEqual(null, tt.NullableUnderlyingType);
             Assert.AreEqual(default(DateTime), tt.Default);
         }
+
+        [TestMethod]
+        public void TestInterface()
+        {
+            var t = typeof(IDictionary);
+            var tt = TypeTraits.Of(t);
+            var tt2 = TypeTraits.Of<IDictionary>();
+            Assert.AreEqual(tt, tt2);
+            Assert.AreEqual(t, tt.Type);
+            Assert.AreEqual(null, tt.NullableUnderlyingType);
+            Assert.AreEqual(default(IDictionary), tt.Default);
+        }
+
+        [TestMethod]
+        public void TestUnfinishedGeneric()
+        {
+            {
+                var t = typeof(IDictionary<,>);
+                var tt = TypeTraits.Of(t);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(null, tt.Default);
+            }
+            {
+                var t = typeof(Dictionary<,>);
+                var tt = TypeTraits.Of(t);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(null, tt.Default);
+            }
+            {
+                var t = typeof(KeyValuePair<,>);
+                var tt = TypeTraits.Of(t);
+                Assert.AreEqual(t, tt.Type);
+                Assert.AreEqual(null, tt.NullableUnderlyingType);
+                Assert.AreEqual(null, tt.Default);
+            }
+        }
     }
 }
