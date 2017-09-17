@@ -203,5 +203,17 @@ namespace System
                 yield return new KeyValuePair<string, T>(names[i], values[i]);
             }
         }
+
+        public static Type GetUnderlyingType<T>()
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            return EnumExtentionCache<T>.TUnderlyingType;
+        }
+
+        public static bool IsFlag<T>()
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            return EnumExtentionCache<T>.IsFlag;
+        }
     }
 }

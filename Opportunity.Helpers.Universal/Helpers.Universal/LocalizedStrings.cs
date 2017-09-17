@@ -10,14 +10,27 @@ namespace Opportunity.Helpers.Universal
     public static class LocalizedStrings
     {
         private static Dictionary<string, string> cache = new Dictionary<string, string>();
-        private static ResourceLoader loader = ResourceLoader.GetForViewIndependentUse("");
+        private static ResourceLoader loader = createLoader();
+
+        private static ResourceLoader createLoader()
+        {
+            try
+            {
+                // try default context first.
+                var r = ResourceLoader.GetForViewIndependentUse();
+                if (r != null)
+                    return r;
+            }
+            catch { }
+            return ResourceLoader.GetForViewIndependentUse("");
+        }
 
         /// <summary>
         /// Reset the <see cref="LocalizedStrings"/>.
         /// </summary>
         public static void Reset()
         {
-            loader = ResourceLoader.GetForViewIndependentUse("");
+            loader = createLoader();
             cache.Clear();
         }
 
