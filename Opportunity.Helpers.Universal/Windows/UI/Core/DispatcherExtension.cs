@@ -13,8 +13,6 @@ namespace Windows.UI.Core
     {
         public static DispatcherAwaiterSource Yield(this CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
-            if (dispatcher == null)
-                throw new ArgumentNullException(nameof(dispatcher));
             return new DispatcherAwaiterSource(dispatcher, priority);
         }
 
@@ -68,6 +66,9 @@ namespace Windows.UI.Core
         }
     }
 
+    /// <summary>
+    /// Awaiter source for methods in <see cref="DispatcherExtension"/>.
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct DispatcherAwaiterSource
     {
@@ -87,15 +88,28 @@ namespace Windows.UI.Core
 
         private readonly IDispatcherAwaiter awaiter;
 
+        /// <summary>
+        /// Get awaiter of this <see cref="DispatcherAwaiterSource"/>.
+        /// </summary>
+        /// <returns>Awaiter of this <see cref="DispatcherAwaiterSource"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public IDispatcherAwaiter GetAwaiter() => this.awaiter;
     }
 
+    /// <summary>
+    /// Awaiter of <see cref="DispatcherAwaiterSource"/>.
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public interface IDispatcherAwaiter : INotifyCompletion
     {
+        /// <summary>
+        /// The awaiter is completed or not, for yield awaiter whose <see cref="CoreDispatcher"/> is not <c>null</c>, will always returns <c>false</c>.
+        /// </summary>
         bool IsCompleted { get; }
 
+        /// <summary>
+        /// Get result of the awaiter, for yield awaiter, will do nothing.
+        /// </summary> 
         void GetResult();
     }
 
