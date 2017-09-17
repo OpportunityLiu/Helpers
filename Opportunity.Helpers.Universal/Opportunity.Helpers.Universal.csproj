@@ -144,9 +144,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Opportunity.Helpers.Universal.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Opportunity.Helpers\Opportunity.Helpers.csproj">
       <Project>{a0b6efbb-a59c-4e99-95ee-9342edd13a8f}</Project>
       <Name>Opportunity.Helpers</Name>
