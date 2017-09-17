@@ -7,7 +7,7 @@
     <ProjectGuid>{0F67234A-B2EC-4982-A996-58258B6B7178}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Opportunity.Helpers.Universal</RootNamespace>
+    <RootNamespace>Opportunity</RootNamespace>
     <AssemblyName>Opportunity.Helpers.Universal</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,7 @@
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -46,6 +48,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x86\Debug\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -57,6 +60,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x86\Release\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <PlatformTarget>ARM</PlatformTarget>
@@ -68,6 +72,7 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\ARM\Debug\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <PlatformTarget>ARM</PlatformTarget>
@@ -79,6 +84,7 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\ARM\Release\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -90,6 +96,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x64\Debug\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -101,28 +108,34 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x64\Release\Opportunity.Helpers.Universal.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AsyncHelpers\..Cast\CastAcyncOperation{TFrom,TTo,TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Cast\CastAcyncOperation{TFrom,TTo}.cs" />
-    <Compile Include="AsyncHelpers\..Cast\CastAsyncAction{T,TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Cast\CastAsyncAction{T}.cs" />
-    <Compile Include="AsyncHelpers\..Cast\CastWrapper.cs" />
-    <Compile Include="AsyncHelpers\..Completed\AsyncWrapper.cs" />
-    <Compile Include="AsyncHelpers\..Completed\CompletedAsyncAction.cs" />
-    <Compile Include="AsyncHelpers\..Completed\CompletedAsyncAction{TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Completed\CompletedAsyncOperation{T,TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Completed\CompletedAsyncOperation{T}.cs" />
-    <Compile Include="AsyncHelpers\..Multicast\MulticastAsyncAction.cs" />
-    <Compile Include="AsyncHelpers\..Multicast\MulticastAsyncAction{TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Multicast\MulticastAsyncOperation{T,TProgress}.cs" />
-    <Compile Include="AsyncHelpers\..Multicast\MulticastAsyncOperation{T}.cs" />
-    <Compile Include="AsyncHelpers\..Multicast\MulticastWrapper.cs" />
-    <Compile Include="AsyncHelpers\PollingAsyncWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Cast\CastAcyncOperation{TFrom,TTo,TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Cast\CastAcyncOperation{TFrom,TTo}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Cast\CastAsyncAction{T,TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Cast\CastAsyncAction{T}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Cast\CastWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Completed\AsyncWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Completed\CompletedAsyncAction.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Completed\CompletedAsyncAction{TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Completed\CompletedAsyncOperation{T,TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Completed\CompletedAsyncOperation{T}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Multicast\MulticastAsyncAction.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Multicast\MulticastAsyncAction{TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Multicast\MulticastAsyncOperation{T,TProgress}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Multicast\MulticastAsyncOperation{T}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\..Multicast\MulticastWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\PollingAsyncWrapper.cs" />
+    <Compile Include="Helpers.Universal\LocalizedStrings.cs" />
+    <Compile Include="Windows\UI\Core\DispatcherExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\Storage\StorageHelper.cs" />
+    <Compile Include="Windows\UI\Xaml\ThemeExtension.cs" />
+    <Compile Include="Windows\UI\Xaml\Media\VisualTreeHelperExtension.cs" />
     <EmbeddedResource Include="Properties\Opportunity.Helpers.Universal.rd.xml" />
   </ItemGroup>
   <ItemGroup>

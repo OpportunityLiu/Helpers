@@ -9,8 +9,16 @@
     <PackageLicenseUrl>https://github.com/OpportunityLiu/Helpers/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OpportunityLiu/Helpers</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.0.5</Version>
+    <Version>1.1.0</Version>
     <RootNamespace>Opportunity</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.4\Opportunity.Helpers.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.4\Opportunity.Helpers.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
