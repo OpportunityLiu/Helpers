@@ -13,5 +13,8 @@
     <releaseNotes>First version of the package.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>UWP helper</tags>
+    <dependencies>
+      <dependency id="Opportunity.Helpers" version="$version$" />
+    </dependencies>
   </metadata>
 </package>
