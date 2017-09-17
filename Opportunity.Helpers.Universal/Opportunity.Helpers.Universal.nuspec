@@ -12,6 +12,6 @@
     <description>$description$</description>
     <releaseNotes>First version of the package.</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>UWP mvvm obervable</tags>
+    <tags>UWP helper</tags>
   </metadata>
 </package>
