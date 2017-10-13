@@ -13,7 +13,7 @@ namespace Opportunity.Helpers.Test
         public void TestClass()
         {
             var t = typeof(object);
-            var tt = TypeTraits.Of(t);
+            var tt = TypeTraits.GetInfo(t);
             var tt2 = TypeTraits.Of<object>();
             Assert.AreEqual(tt, tt2);
             Assert.AreEqual(t, tt.Type);
@@ -26,7 +26,7 @@ namespace Opportunity.Helpers.Test
         {
             {
                 var t = typeof(int?);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<int?>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -35,7 +35,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(StringComparison?);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<StringComparison?>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -44,7 +44,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(DateTime?);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<DateTime?>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -58,7 +58,7 @@ namespace Opportunity.Helpers.Test
         {
             {
                 var t = typeof(int);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<int>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -67,7 +67,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(byte);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<byte>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -76,7 +76,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(double);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<double>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -85,7 +85,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(decimal);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<decimal>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -94,7 +94,7 @@ namespace Opportunity.Helpers.Test
             }
             {
                 var t = typeof(char);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 var tt2 = TypeTraits.Of<char>();
                 Assert.AreEqual(tt, tt2);
                 Assert.AreEqual(t, tt.Type);
@@ -107,7 +107,7 @@ namespace Opportunity.Helpers.Test
         public void TestEnum()
         {
             var t = typeof(StringComparison);
-            var tt = TypeTraits.Of(t);
+            var tt = TypeTraits.GetInfo(t);
             var tt2 = TypeTraits.Of<StringComparison>();
             Assert.AreEqual(tt, tt2);
             Assert.AreEqual(t, tt.Type);
@@ -119,7 +119,7 @@ namespace Opportunity.Helpers.Test
         public void TestStruct()
         {
             var t = typeof(DateTime);
-            var tt = TypeTraits.Of(t);
+            var tt = TypeTraits.GetInfo(t);
             var tt2 = TypeTraits.Of<DateTime>();
             Assert.AreEqual(tt, tt2);
             Assert.AreEqual(t, tt.Type);
@@ -131,7 +131,7 @@ namespace Opportunity.Helpers.Test
         public void TestInterface()
         {
             var t = typeof(IDictionary);
-            var tt = TypeTraits.Of(t);
+            var tt = TypeTraits.GetInfo(t);
             var tt2 = TypeTraits.Of<IDictionary>();
             Assert.AreEqual(tt, tt2);
             Assert.AreEqual(t, tt.Type);
@@ -144,21 +144,21 @@ namespace Opportunity.Helpers.Test
         {
             {
                 var t = typeof(IDictionary<,>);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 Assert.AreEqual(t, tt.Type);
                 Assert.AreEqual(null, tt.NullableUnderlyingType);
                 Assert.AreEqual(null, tt.Default);
             }
             {
                 var t = typeof(Dictionary<,>);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 Assert.AreEqual(t, tt.Type);
                 Assert.AreEqual(null, tt.NullableUnderlyingType);
                 Assert.AreEqual(null, tt.Default);
             }
             {
                 var t = typeof(KeyValuePair<,>);
-                var tt = TypeTraits.Of(t);
+                var tt = TypeTraits.GetInfo(t);
                 Assert.AreEqual(t, tt.Type);
                 Assert.AreEqual(null, tt.NullableUnderlyingType);
                 Assert.AreEqual(null, tt.Default);

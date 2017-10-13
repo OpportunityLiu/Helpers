@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace System
 {
     public static class EnumExtension
     {
-        private static class EnumExtentionCache<T>
+        internal static class EnumExtentionCache<T>
             where T : struct, IComparable, IFormattable, IConvertible
         {
             static EnumExtentionCache()
@@ -193,29 +192,6 @@ namespace System
             where T : struct, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.GetIndex(that) >= 0;
-        }
-
-        public static IEnumerable<KeyValuePair<string, T>> GetDefinedValues<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
-        {
-            var names = EnumExtentionCache<T>.Names;
-            var values = EnumExtentionCache<T>.Values;
-            for (var i = 0; i < names.Length; i++)
-            {
-                yield return new KeyValuePair<string, T>(names[i], values[i]);
-            }
-        }
-
-        public static Type GetUnderlyingType<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
-        {
-            return EnumExtentionCache<T>.TUnderlyingType;
-        }
-
-        public static bool IsFlag<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
-        {
-            return EnumExtentionCache<T>.IsFlag;
         }
     }
 }
