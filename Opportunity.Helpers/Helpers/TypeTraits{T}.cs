@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Opportunity.Helpers
 {
-    public struct TypeTraitsInfo : IEquatable<TypeTraitsInfo>
+    public readonly struct TypeTraitsInfo : IEquatable<TypeTraitsInfo>
     {
         internal TypeTraitsInfo(Type type)
         {
