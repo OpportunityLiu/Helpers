@@ -9,7 +9,7 @@
     <PackageLicenseUrl>https://github.com/OpportunityLiu/Helpers/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OpportunityLiu/Helpers</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.1.4</Version>
+    <Version>1.1.5</Version>
     <RootNamespace>Opportunity</RootNamespace>
   </PropertyGroup>
 
