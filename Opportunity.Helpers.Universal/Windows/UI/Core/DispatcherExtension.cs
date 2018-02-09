@@ -37,6 +37,10 @@ namespace Windows.UI.Core
                 throw new ArgumentNullException(nameof(dispatcher));
             if (agileCallback == null)
                 throw new ArgumentNullException(nameof(agileCallback));
+            if (priority > CoreDispatcherPriority.High)
+                priority = CoreDispatcherPriority.High;
+            else if (priority < CoreDispatcherPriority.Idle)
+                priority = CoreDispatcherPriority.Idle;
             if (priority == CoreDispatcherPriority.Idle)
                 beginIdleCore(dispatcher, a => agileCallback());
             else
@@ -76,7 +80,7 @@ namespace Windows.UI.Core
         {
             if (priority > CoreDispatcherPriority.High)
                 priority = CoreDispatcherPriority.High;
-            if (priority < CoreDispatcherPriority.Idle)
+            else if (priority < CoreDispatcherPriority.Idle)
                 priority = CoreDispatcherPriority.Idle;
             if (dispatcher == null)
                 this.awaiter = new EmptyDispatcherAwaiter();
@@ -140,9 +144,9 @@ namespace Windows.UI.Core
 
         public void GetResult() { }
 
-        public async void OnCompleted(Action continuation)
+        public void OnCompleted(Action continuation)
         {
-            await this.dispatcher.RunIdleAsync(a => continuation());
+            var ignore = this.dispatcher.RunIdleAsync(a => continuation());
         }
     }
 
@@ -161,9 +165,9 @@ namespace Windows.UI.Core
 
         public void GetResult() { }
 
-        public async void OnCompleted(Action continuation)
+        public void OnCompleted(Action continuation)
         {
-            await this.dispatcher.RunAsync(this.priority, () => continuation());
+            var ignore = this.dispatcher.RunAsync(this.priority, () => continuation());
         }
     }
 }
