@@ -6,12 +6,16 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     {
         public static IAsyncOperation<TTo> Cast<TFrom, TTo>(this IAsyncOperation<TFrom> operation)
         {
-            return new CastAcyncOperation<TFrom, TTo>(operation);
+            if (operation is CastAsyncOperation<TTo, TFrom> c)
+                return c.Operation;
+            return new CastAsyncOperation<TFrom, TTo>(operation);
         }
 
         public static IAsyncOperationWithProgress<TTo, TProgress> Cast<TFrom, TTo, TProgress>(this IAsyncOperationWithProgress<TFrom, TProgress> operation)
         {
-            return new CastAcyncOperation<TFrom, TTo, TProgress>(operation);
+            if (operation is CastAsyncOperation<TTo, TFrom, TProgress> c)
+                return c.Operation;
+            return new CastAsyncOperation<TFrom, TTo, TProgress>(operation);
         }
 
         public static IAsyncAction AsAsyncAction<T>(this IAsyncOperation<T> operation)
