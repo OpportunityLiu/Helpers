@@ -19,11 +19,11 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (action.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncWrapper.CreateCanceled();
+                return AsyncAction.CreateCancelled();
             case AsyncStatus.Completed:
-                return AsyncWrapper.CreateCompleted();
+                return AsyncAction.CreateCompleted();
             case AsyncStatus.Error:
-                return AsyncWrapper.CreateError(action.ErrorCode);
+                return AsyncAction.CreateFault(action.ErrorCode);
             }
             return AsyncInfo.Run(async token =>
             {
@@ -58,11 +58,11 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (action.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncWrapper.CreateCanceled();
+                return AsyncAction.CreateCancelled();
             case AsyncStatus.Completed:
-                return AsyncWrapper.CreateCompleted();
+                return AsyncAction.CreateCompleted();
             case AsyncStatus.Error:
-                return AsyncWrapper.CreateError(action.ErrorCode);
+                return AsyncAction.CreateFault(action.ErrorCode);
             }
             return AsyncInfo.Run(async token =>
             {
@@ -97,11 +97,11 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (operation.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncWrapper.CreateCanceled<T>();
+                return AsyncOperation<T>.CreateCancelled();
             case AsyncStatus.Completed:
-                return AsyncWrapper.CreateCompleted(operation.GetResults());
+                return AsyncOperation<T>.CreateCompleted(operation.GetResults());
             case AsyncStatus.Error:
-                return AsyncWrapper.CreateError<T>(operation.ErrorCode);
+                return AsyncOperation<T>.CreateFault(operation.ErrorCode);
             }
             return AsyncInfo.Run(async token =>
             {
@@ -135,11 +135,11 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (operation.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncWrapper.CreateCanceled<T>();
+                return AsyncOperation<T>.CreateCancelled();
             case AsyncStatus.Completed:
-                return AsyncWrapper.CreateCompleted(operation.GetResults());
+                return AsyncOperation<T>.CreateCompleted(operation.GetResults());
             case AsyncStatus.Error:
-                return AsyncWrapper.CreateError<T>(operation.ErrorCode);
+                return AsyncOperation<T>.CreateFault(operation.ErrorCode);
             }
             return AsyncInfo.Run(async token =>
             {

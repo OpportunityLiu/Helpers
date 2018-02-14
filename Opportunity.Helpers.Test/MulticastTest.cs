@@ -13,7 +13,8 @@ namespace Opportunity.Helpers.Test
         {
             using (var client = new HttpClient())
             {
-                var action = client.GetAsync(new Uri("https://www.baidu.com")).AsMulticast();
+                var g = client.GetAsync(new Uri("https://www.baidu.com"));
+                var action = g.AsMulticast();
                 action.Completed += (s, e) =>
                 {
 
