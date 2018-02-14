@@ -9,9 +9,9 @@
     <PackageLicenseUrl>https://github.com/OpportunityLiu/Helpers/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OpportunityLiu/Helpers</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <RootNamespace>Opportunity</RootNamespace>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
     <PackageTags>helpers</PackageTags>
   </PropertyGroup>
 
