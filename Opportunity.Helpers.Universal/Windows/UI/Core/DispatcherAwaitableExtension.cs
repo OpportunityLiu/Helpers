@@ -1,20 +1,25 @@
 ﻿using Opportunity.Helpers.Universal.AsyncHelpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace Windows.UI.Core
 {
+    /// <summary>
+    /// Extension methods to run <see cref="Func{TResult}"/>, <see cref="IAsyncAction"/> and <see cref="IAsyncOperation{TResult}"/>
+    /// on UI thread.
+    /// </summary>
     public static class DispatcherAwaitableExtension
     {
         #region RunAsyncAction
 
+        /// <summary>
+        /// Run an <see cref="IAsyncAction"/> on UI thread.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="priority">priority of execution</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <returns>an <see cref="IAsyncAction"/> that will complete
+        /// on returned <see cref="IAsyncAction"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncAction RunAsync(this CoreDispatcher dispatcher, CoreDispatcherPriority priority, Func<IAsyncAction> agileCallback)
         {
             if (dispatcher == null)
@@ -30,9 +35,23 @@ namespace Windows.UI.Core
             return runAsyncCore(dispatcher, priority, agileCallback);
         }
 
+        /// <summary>
+        /// Run an <see cref="IAsyncAction"/> on UI thread with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <returns>an <see cref="IAsyncAction"/> that will complete
+        /// on returned <see cref="IAsyncAction"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncAction RunIdleAsync(this CoreDispatcher dispatcher, Func<IAsyncAction> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Idle, agileCallback);
 
+        /// <summary>
+        /// Run an <see cref="IAsyncAction"/> on UI thread with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <returns>an <see cref="IAsyncAction"/> that will complete
+        /// on returned <see cref="IAsyncAction"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncAction RunAsync(this CoreDispatcher dispatcher, Func<IAsyncAction> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Normal, agileCallback);
 
@@ -92,6 +111,15 @@ namespace Windows.UI.Core
 
         #region RunAsyncOperation
 
+        /// <summary>
+        /// Run an <see cref="IAsyncOperation{TResult}"/> on UI thread.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="priority">priority of execution</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on returned <see cref="IAsyncOperation{TResult}"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunAsync<T>(this CoreDispatcher dispatcher, CoreDispatcherPriority priority, Func<IAsyncOperation<T>> agileCallback)
         {
             if (dispatcher == null)
@@ -107,9 +135,25 @@ namespace Windows.UI.Core
             return runAsyncCore(dispatcher, priority, agileCallback);
         }
 
+        /// <summary>
+        /// Run an <see cref="IAsyncOperation{TResult}"/> on UI thread with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on returned <see cref="IAsyncOperation{TResult}"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunIdleAsync<T>(this CoreDispatcher dispatcher, Func<IAsyncOperation<T>> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Idle, agileCallback);
 
+        /// <summary>
+        /// Run an <see cref="IAsyncOperation{TResult}"/> on UI thread with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on returned <see cref="IAsyncOperation{TResult}"/> of <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunAsync<T>(this CoreDispatcher dispatcher, Func<IAsyncOperation<T>> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Normal, agileCallback);
 
@@ -167,6 +211,15 @@ namespace Windows.UI.Core
 
         #region RunAsyncResult
 
+        /// <summary>
+        /// Run an <see cref="Func{TResult}"/> on UI thread.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="priority">priority of execution</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunAsync<T>(this CoreDispatcher dispatcher, CoreDispatcherPriority priority, Func<T> agileCallback)
         {
             if (dispatcher == null)
@@ -182,9 +235,25 @@ namespace Windows.UI.Core
             return runAsyncCore(dispatcher, priority, agileCallback);
         }
 
+        /// <summary>
+        /// Run an <see cref="Func{TResult}"/> on UI thread with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunIdleAsync<T>(this CoreDispatcher dispatcher, Func<T> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Idle, agileCallback);
 
+        /// <summary>
+        /// Run an <see cref="Func{TResult}"/> on UI thread with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <typeparam name="T">result type of <see cref="IAsyncOperation{TResult}"/></typeparam>
+        /// <returns>an <see cref="IAsyncOperation{TResult}"/> that will complete
+        /// on <paramref name="agileCallback"/> completing</returns>
         public static IAsyncOperation<T> RunAsync<T>(this CoreDispatcher dispatcher, Func<T> agileCallback)
             => RunAsync(dispatcher, CoreDispatcherPriority.Normal, agileCallback);
 

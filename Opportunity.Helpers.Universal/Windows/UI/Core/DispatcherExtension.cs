@@ -11,15 +11,36 @@ using Windows.Foundation;
 
 namespace Windows.UI.Core
 {
+    /// <summary>
+    /// Extension methods for <see cref="CoreDispatcher"/>.
+    /// </summary>
     public static class DispatcherExtension
     {
+        /// <summary>
+        /// Run <paramref name="agileCallback"/> on UI thread with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <returns>an <see cref="IAsyncAction"/> indicates the completion of <paramref name="agileCallback"/></returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
+        /// is <see langword="null"/></exception>
         public static IAsyncAction RunAsync(this CoreDispatcher dispatcher, DispatchedHandler agileCallback)
         {
             if (dispatcher == null)
                 throw new ArgumentNullException(nameof(dispatcher));
+            if (agileCallback == null)
+                throw new ArgumentNullException(nameof(agileCallback));
             return dispatcher.RunAsync(CoreDispatcherPriority.Normal, agileCallback);
         }
 
+        /// <summary>
+        /// Begin <paramref name="agileCallback"/> on UI thread.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="priority">priority of execution</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
+        /// is <see langword="null"/></exception>
         public static void Begin(this CoreDispatcher dispatcher, CoreDispatcherPriority priority, DispatchedHandler agileCallback)
         {
             if (dispatcher == null)
@@ -36,9 +57,23 @@ namespace Windows.UI.Core
                 beginCore(dispatcher, priority, agileCallback);
         }
 
+        /// <summary>
+        /// Begin <paramref name="agileCallback"/> on UI thread with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
+        /// is <see langword="null"/></exception>
         public static void Begin(this CoreDispatcher dispatcher, DispatchedHandler agileCallback)
             => Begin(dispatcher, CoreDispatcherPriority.Normal, agileCallback);
 
+        /// <summary>
+        /// Begin <paramref name="agileCallback"/> on UI thread with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
+        /// is <see langword="null"/></exception>
         public static void BeginIdle(this CoreDispatcher dispatcher, IdleDispatchedHandler agileCallback)
         {
             if (dispatcher == null)

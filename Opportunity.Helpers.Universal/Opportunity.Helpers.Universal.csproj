@@ -74,10 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.2.3</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.4.0</Version>
+      <Version>5.2.4</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +82,9 @@
       <Project>{a0b6efbb-a59c-4e99-95ee-9342edd13a8f}</Project>
       <Name>Opportunity.Helpers</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Opportunity.Helpers.Universal.nuspec" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

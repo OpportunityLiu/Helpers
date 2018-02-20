@@ -11,14 +11,33 @@ using Windows.Foundation;
 
 namespace Windows.UI.Core
 {
+    /// <summary>
+    /// Yield methods for <see cref="CoreDispatcher"/>.
+    /// </summary>
     public static class DispatcherYieldExtension
     {
+        /// <summary>
+        /// Create an awaiter source that asynchronously yields back to the UI context when awaited.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
+        /// <param name="priority">priority of callback</param>
+        /// <returns>awaiter source for yield</returns>
         public static DispatcherAwaiterSource Yield(this CoreDispatcher dispatcher, CoreDispatcherPriority priority)
             => new DispatcherAwaiterSource(dispatcher, priority);
 
+        /// <summary>
+        /// Create an awaiter source that asynchronously yields back to the UI context when awaited with normal priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
+        /// <returns>awaiter source for yield</returns>
         public static DispatcherAwaiterSource Yield(this CoreDispatcher dispatcher)
             => Yield(dispatcher, CoreDispatcherPriority.Normal);
 
+        /// <summary>
+        /// Create an awaiter source that asynchronously yields back to the UI context when awaited with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
+        /// <returns>awaiter source for yield</returns>
         public static DispatcherAwaiterSource YieldIdle(this CoreDispatcher dispatcher)
             => Yield(dispatcher, CoreDispatcherPriority.Idle);
     }
