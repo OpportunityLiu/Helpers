@@ -1,4 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
@@ -32,18 +36,20 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.completed;
             set
             {
-                if (this.completed != null)
+                if (Interlocked.CompareExchange(ref this.completed, value, null) != null)
                     throw new InvalidOperationException("Completed has been set.");
-                this.completed = value;
+                if (this.Status != AsyncStatus.Started)
+                    value?.Invoke(this, this.Status);
             }
         }
 
         private T results;
         public void SetResults(T results)
         {
+            var c = this.completed;
             PreSetResults();
             this.results = results;
-            this.completed?.Invoke(this, this.Status);
+            c?.Invoke(this, this.Status);
         }
 
         public T GetResults()
@@ -52,10 +58,18 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             return this.results;
         }
 
-        public override void SetException(Exception ex)
+        public void SetException(Exception ex)
         {
-            base.SetException(ex);
-            this.completed?.Invoke(this, this.Status);
+            var c = this.completed;
+            PreSetException(ex);
+            c?.Invoke(this, this.Status);
+        }
+
+        public override void Cancel()
+        {
+            var c = this.completed;
+            if (PreCancel())
+                c?.Invoke(this, this.Status);
         }
 
         public override void Close()

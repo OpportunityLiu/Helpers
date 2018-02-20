@@ -35,92 +35,64 @@ namespace Windows.UI.Core
                 priority = CoreDispatcherPriority.High;
             else if (priority < CoreDispatcherPriority.Idle)
                 priority = CoreDispatcherPriority.Idle;
-            if (dispatcher == null)
-                this.awaiter = new EmptyDispatcherAwaiter();
-            else if (priority == CoreDispatcherPriority.Idle)
-                this.awaiter = new IdleDispatcherAwaiter(dispatcher);
-            else
-                this.awaiter = new NormalDispatcherAwaiter(dispatcher, priority);
+            this.awaiter = new DispatcherAwaiter(dispatcher, priority);
         }
 
-        private readonly IDispatcherAwaiter awaiter;
+        private readonly DispatcherAwaiter awaiter;
 
         /// <summary>
         /// Get awaiter of this <see cref="DispatcherAwaiterSource"/>.
         /// </summary>
         /// <returns>Awaiter of this <see cref="DispatcherAwaiterSource"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IDispatcherAwaiter GetAwaiter() => this.awaiter;
+        public DispatcherAwaiter GetAwaiter() => this.awaiter;
     }
 
     /// <summary>
     /// Awaiter of <see cref="DispatcherAwaiterSource"/>.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public interface IDispatcherAwaiter : INotifyCompletion
-    {
-        /// <summary>
-        /// The awaiter is completed or not, for yield awaiter whose <see cref="CoreDispatcher"/> is not <c>null</c>, will always returns <c>false</c>.
-        /// </summary>
-        bool IsCompleted { get; }
-
-        /// <summary>
-        /// Get result of the awaiter, for yield awaiter, will do nothing.
-        /// </summary> 
-        void GetResult();
-    }
-
-    internal sealed class EmptyDispatcherAwaiter : IDispatcherAwaiter
-    {
-        public EmptyDispatcherAwaiter() { }
-
-        public bool IsCompleted => true;
-
-        public void GetResult() { }
-
-        public void OnCompleted(Action continuation)
-        {
-            continuation();
-        }
-    }
-
-    internal sealed class IdleDispatcherAwaiter : IDispatcherAwaiter
-    {
-        private readonly CoreDispatcher dispatcher;
-
-        public IdleDispatcherAwaiter(CoreDispatcher dispatcher)
-        {
-            this.dispatcher = dispatcher;
-        }
-
-        public bool IsCompleted => false;
-
-        public void GetResult() { }
-
-        public void OnCompleted(Action continuation)
-        {
-            var ignore = this.dispatcher.RunIdleAsync(a => continuation());
-        }
-    }
-
-    internal sealed class NormalDispatcherAwaiter : IDispatcherAwaiter
+    public struct DispatcherAwaiter : INotifyCompletion
     {
         private readonly CoreDispatcher dispatcher;
         private readonly CoreDispatcherPriority priority;
 
-        internal NormalDispatcherAwaiter(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+        internal DispatcherAwaiter(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             this.dispatcher = dispatcher;
             this.priority = priority;
         }
 
-        public bool IsCompleted => false;
+        /// <summary>
+        /// The awaiter is completed or not, for yield awaiter whose <see cref="CoreDispatcher"/> is not <see langword="null"/>,
+        /// will always returns <see langword="false"/>.
+        /// </summary>
+        public bool IsCompleted => this.dispatcher == null;
 
+        /// <summary>
+        /// Get result of the awaiter, for yield awaiter, will do nothing.
+        /// </summary> 
         public void GetResult() { }
 
+        /// <summary>
+        /// Schedules the continuation action that's invoked when the instance completes.
+        /// </summary>
+        /// <param name="continuation">the action to invoke when the operation completes</param>
         public void OnCompleted(Action continuation)
         {
-            var ignore = this.dispatcher.RunAsync(this.priority, () => continuation());
+            if (this.dispatcher == null)
+            {
+                continuation();
+                return;
+            }
+            if (this.priority == CoreDispatcherPriority.Idle)
+            {
+                var ignore = this.dispatcher.RunIdleAsync(a => continuation());
+            }
+            else
+            {
+                var ignore = this.dispatcher.RunAsync(this.priority, () => continuation());
+            }
         }
     }
 }

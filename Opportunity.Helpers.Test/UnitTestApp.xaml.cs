@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,6 +33,8 @@ namespace Opportunity.Helpers.Test
             this.Suspending += OnSuspending;
         }
 
+        public CoreDispatcher Dispatcher;
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -46,7 +49,7 @@ namespace Opportunity.Helpers.Test
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-
+            this.Dispatcher = Window.Current.Dispatcher;
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -66,7 +69,7 @@ namespace Opportunity.Helpers.Test
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-            
+
             Microsoft.VisualStudio.TestPlatform.TestExecutor.UnitTestClient.CreateDefaultUI();
 
             // Ensure the current window is active

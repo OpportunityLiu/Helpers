@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
@@ -32,24 +33,34 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.completed;
             set
             {
-                if (this.completed != null)
+                if (Interlocked.CompareExchange(ref this.completed, value, null) != null)
                     throw new InvalidOperationException("Completed has been set.");
-                this.completed = value;
+                if (this.Status != AsyncStatus.Started)
+                    value?.Invoke(this, this.Status);
             }
         }
 
         public void SetResults()
         {
+            var c = this.completed;
             PreSetResults();
-            this.completed?.Invoke(this, this.Status);
+            c?.Invoke(this, this.Status);
         }
 
         public void GetResults() => PreGetResults();
 
-        public override void SetException(Exception ex)
+        public void SetException(Exception ex)
         {
-            base.SetException(ex);
-            this.completed?.Invoke(this, this.Status);
+            var c = this.completed;
+            PreSetException(ex);
+            c?.Invoke(this, this.Status);
+        }
+
+        public override void Cancel()
+        {
+            var c = this.completed;
+            if (PreCancel())
+                c?.Invoke(this, this.Status);
         }
 
         public void Report(TProgress value) => this.progress?.Invoke(this, value);
@@ -60,9 +71,8 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.progress;
             set
             {
-                if (this.progress != null)
-                    throw new InvalidOperationException("Completed has been set.");
-                this.progress = value;
+                if (Interlocked.CompareExchange(ref this.progress, value, null) != null)
+                    throw new InvalidOperationException("Progress has been set.");
             }
         }
     }
