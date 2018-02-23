@@ -22,6 +22,7 @@ namespace Opportunity.Helpers.Universal
                     return r;
             }
             catch { }
+            // use root context
             return ResourceLoader.GetForViewIndependentUse("");
         }
 
