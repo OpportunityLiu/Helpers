@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Text;
 
 namespace System
@@ -11,10 +13,26 @@ namespace System
     /// <typeparam name="T">Value type</typeparam>
     public class Box<T> : IBox<T>, IList<T>, IReadOnlyList<T>, IList
     {
+        private T value;
         /// <summary>
         /// Value in the <see cref="Box{T}"/>
         /// </summary>
-        public T Value { get; set; }
+        public T Value
+        {
+            get => this.value;
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+
+        private void OnValueChanged()
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
+            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         object IBox.Value
         {
             get => Value;
@@ -32,17 +50,12 @@ namespace System
             }
         }
 
-        T IReadOnlyList<T>.this[int index] => index == 0 ? Value : throw new IndexOutOfRangeException();
+        T IReadOnlyList<T>.this[int index] => ((IList<T>)this)[index];
 
         object IList.this[int index]
         {
-            get => index == 0 ? Value : throw new IndexOutOfRangeException();
-            set
-            {
-                if (index != 0)
-                    throw new IndexOutOfRangeException();
-                Value = (T)value;
-            }
+            get => ((IList<T>)this)[index];
+            set => ((IList<T>)this)[index] = (T)value;
         }
 
         int ICollection<T>.Count => 1;
@@ -58,6 +71,9 @@ namespace System
 
         object ICollection.SyncRoot => this;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
         void ICollection<T>.Add(T item) => throw new InvalidOperationException();
         int IList.Add(object value) => throw new InvalidOperationException();
         void ICollection<T>.Clear() => throw new InvalidOperationException();
@@ -70,7 +86,14 @@ namespace System
         void IList.RemoveAt(int index) => throw new InvalidOperationException();
 
         bool ICollection<T>.Contains(T item) => EqualityComparer<T>.Default.Equals(Value, item);
-        bool IList.Contains(object value) => EqualityComparer<object>.Default.Equals(Value, value);
+        bool IList.Contains(object value)
+        {
+            if (value is T item)
+                return ((ICollection<T>)this).Contains(item);
+            if (value is null)
+                return Value == null;
+            return false;
+        }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
@@ -104,7 +127,7 @@ namespace System
     /// Simple box of value.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public interface IBox<T> : IBox
+    public interface IBox<T> : IBox, IList<T>, IReadOnlyList<T>
     {
         /// <summary>
         /// Value in the <see cref="IBox{T}"/>
@@ -115,7 +138,7 @@ namespace System
     /// <summary>
     /// Simple box of value.
     /// </summary>
-    public interface IBox
+    public interface IBox : IList, INotifyPropertyChanged, INotifyCollectionChanged
     {
         /// <summary>
         /// Value in the <see cref="IBox"/>

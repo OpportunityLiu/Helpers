@@ -14,9 +14,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(AssemblyInfo.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfo.Version)]
 [assembly: ComVisible(false)]
-//[assembly: InternalsVisibleTo("Opportunity.MvvmUniverse.Test")]
+[assembly: InternalsVisibleTo("Opportunity.Helpers.Test")]
 
 internal static class AssemblyInfo
 {
-    public const string Version = "1.2.1.0";
+    public const string Version = "1.2.2.0";
 }

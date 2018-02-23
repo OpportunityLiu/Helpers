@@ -6,12 +6,26 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     public sealed class AsyncAction<TProgress> : AsyncInfoBase, IAsyncActionWithProgress<TProgress>, IProgress<TProgress>
     {
-        public static AsyncAction<TProgress> CreateCompleted()
+        private static class Cache
         {
-            var r = new AsyncAction<TProgress>();
-            r.SetResults();
-            return r;
+            public static readonly AsyncAction<TProgress> Completed = createCompleted();
+            private static AsyncAction<TProgress> createCompleted()
+            {
+                var r = new AsyncAction<TProgress>();
+                r.SetResults();
+                return r;
+            }
+
+            public static readonly AsyncAction<TProgress> Canceled = createCanceled();
+            private static AsyncAction<TProgress> createCanceled()
+            {
+                var r = new AsyncAction<TProgress>();
+                r.Cancel();
+                return r;
+            }
         }
+
+        public static AsyncAction<TProgress> CreateCompleted() => Cache.Completed;
 
         public static AsyncAction<TProgress> CreateFault(Exception ex)
         {
@@ -20,12 +34,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             return r;
         }
 
-        public static AsyncAction<TProgress> CreateCancelled()
-        {
-            var r = new AsyncAction<TProgress>();
-            r.Cancel();
-            return r;
-        }
+        public static AsyncAction<TProgress> CreateCanceled() => Cache.Canceled;
 
         private AsyncActionWithProgressCompletedHandler<TProgress> completed;
         public AsyncActionWithProgressCompletedHandler<TProgress> Completed
@@ -33,10 +42,13 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.completed;
             set
             {
-                if (Interlocked.CompareExchange(ref this.completed, value, null) != null)
-                    throw new InvalidOperationException("Completed has been set.");
                 if (this.Status != AsyncStatus.Started)
+                {
                     value?.Invoke(this, this.Status);
+                    Interlocked.Exchange(ref this.completed, value);
+                }
+                else if (Interlocked.CompareExchange(ref this.completed, value, null) != null)
+                    throw new InvalidOperationException("Completed has been set.");
             }
         }
 

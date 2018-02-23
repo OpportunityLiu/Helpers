@@ -19,7 +19,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (action.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncAction.CreateCancelled();
+                return AsyncAction.CreateCanceled();
             case AsyncStatus.Completed:
                 return AsyncAction.CreateCompleted();
             case AsyncStatus.Error:
@@ -58,7 +58,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (action.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncAction.CreateCancelled();
+                return AsyncAction.CreateCanceled();
             case AsyncStatus.Completed:
                 return AsyncAction.CreateCompleted();
             case AsyncStatus.Error:
@@ -97,7 +97,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (operation.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncOperation<T>.CreateCancelled();
+                return AsyncOperation<T>.CreateCanceled();
             case AsyncStatus.Completed:
                 return AsyncOperation<T>.CreateCompleted(operation.GetResults());
             case AsyncStatus.Error:
@@ -135,7 +135,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             switch (operation.Status)
             {
             case AsyncStatus.Canceled:
-                return AsyncOperation<T>.CreateCancelled();
+                return AsyncOperation<T>.CreateCanceled();
             case AsyncStatus.Completed:
                 return AsyncOperation<T>.CreateCompleted(operation.GetResults());
             case AsyncStatus.Error:

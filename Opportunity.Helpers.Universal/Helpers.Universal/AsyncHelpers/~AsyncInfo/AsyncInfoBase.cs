@@ -27,19 +27,19 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 
         public abstract void Cancel();
 
-        public void RegisterCancellation(Action cancelledCallback)
+        public void RegisterCancellation(Action CanceledCallback)
         {
-            this.cancelledCallback += cancelledCallback;
+            this.CanceledCallback += CanceledCallback;
         }
 
-        private Action cancelledCallback;
+        private Action CanceledCallback;
 
         internal bool PreCancel()
         {
             var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Canceled, (int)AsyncStatus.Started);
             if (state != AsyncStatus.Started)
                 return false;
-            this.cancelledCallback?.Invoke();
+            this.CanceledCallback?.Invoke();
             return true;
         }
 
