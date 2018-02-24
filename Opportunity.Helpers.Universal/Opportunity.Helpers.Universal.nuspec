@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/OpportunityLiu/Helpers</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>UWP helper</tags>
     <dependencies>
       <group targetFramework="uap10.0">

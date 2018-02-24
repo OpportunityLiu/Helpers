@@ -8,35 +8,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     public sealed class AsyncAction : AsyncInfoBase, IAsyncAction
     {
-        private static class Cache
-        {
-            public static readonly AsyncAction Completed = createCompleted();
-            private static AsyncAction createCompleted()
-            {
-                var r = new AsyncAction();
-                r.SetResults();
-                return r;
-            }
-
-            public static readonly AsyncAction Canceled = createCanceled();
-            private static AsyncAction createCanceled()
-            {
-                var r = new AsyncAction();
-                r.Cancel();
-                return r;
-            }
-        }
-
-        public static AsyncAction CreateCompleted() => Cache.Completed;
-
-        public static AsyncAction CreateFault(Exception ex)
-        {
-            var r = new AsyncAction();
-            r.SetException(ex);
-            return r;
-        }
-
-        public static AsyncAction CreateCanceled() => Cache.Canceled;
+        public static IAsyncAction CreateCompleted() => CompletedAsyncInfo<VoidResult, VoidProgress>.Instanse;
+        public static IAsyncAction CreateFault() => FaultedAsyncInfo<VoidResult, VoidProgress>.Instanse;
+        public static IAsyncAction CreateFault(Exception ex) => FaultedAsyncInfo<VoidResult, VoidProgress>.Create(ex);
+        public static IAsyncAction CreateCanceled() => CanceledAsyncInfo<VoidResult, VoidProgress>.Instanse;
 
         private AsyncActionCompletedHandler completed;
         public AsyncActionCompletedHandler Completed

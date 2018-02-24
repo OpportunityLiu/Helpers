@@ -6,35 +6,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     public sealed class AsyncAction<TProgress> : AsyncInfoBase, IAsyncActionWithProgress<TProgress>, IProgress<TProgress>
     {
-        private static class Cache
-        {
-            public static readonly AsyncAction<TProgress> Completed = createCompleted();
-            private static AsyncAction<TProgress> createCompleted()
-            {
-                var r = new AsyncAction<TProgress>();
-                r.SetResults();
-                return r;
-            }
-
-            public static readonly AsyncAction<TProgress> Canceled = createCanceled();
-            private static AsyncAction<TProgress> createCanceled()
-            {
-                var r = new AsyncAction<TProgress>();
-                r.Cancel();
-                return r;
-            }
-        }
-
-        public static AsyncAction<TProgress> CreateCompleted() => Cache.Completed;
-
-        public static AsyncAction<TProgress> CreateFault(Exception ex)
-        {
-            var r = new AsyncAction<TProgress>();
-            r.SetException(ex);
-            return r;
-        }
-
-        public static AsyncAction<TProgress> CreateCanceled() => Cache.Canceled;
+        public static IAsyncActionWithProgress<TProgress> CreateCompleted() => CompletedAsyncInfo<VoidResult, TProgress>.Instanse;
+        public static IAsyncActionWithProgress<TProgress> CreateFault() => FaultedAsyncInfo<VoidResult, TProgress>.Instanse;
+        public static IAsyncActionWithProgress<TProgress> CreateFault(Exception ex) => FaultedAsyncInfo<VoidResult, TProgress>.Create(ex);
+        public static IAsyncActionWithProgress<TProgress> CreateCanceled() => CanceledAsyncInfo<VoidResult, TProgress>.Instanse;
 
         private AsyncActionWithProgressCompletedHandler<TProgress> completed;
         public AsyncActionWithProgressCompletedHandler<TProgress> Completed

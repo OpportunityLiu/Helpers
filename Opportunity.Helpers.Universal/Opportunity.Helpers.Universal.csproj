@@ -44,6 +44,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\AsyncOperationCache.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T,TProgress}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncInfoBase.cs" />
@@ -55,6 +56,10 @@
     <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncAction{T}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncBase.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\CompletedAsyncInfo.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\FaultedAsyncInfo.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\CanceledAsyncInfo.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\VoidStructs.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Multicast\MulticastAsyncBase.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Multicast\MulticastAsyncAction.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Multicast\MulticastAsyncAction{TProgress}.cs" />

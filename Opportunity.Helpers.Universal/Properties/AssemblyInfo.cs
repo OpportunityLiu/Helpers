@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Helper for UWP apps and libs")]
 [assembly: AssemblyCompany("Opportunity")]
 [assembly: AssemblyProduct("Opportunity.Helpers")]
-[assembly: AssemblyCopyright("Copyright © Opportunity 2017")]
+[assembly: AssemblyCopyright("Copyright © Opportunity 2018")]
 [assembly: AssemblyTrademark("Opportunity")]
 [assembly: AssemblyVersion(AssemblyInfo.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfo.Version)]
@@ -18,5 +18,5 @@ using System.Runtime.InteropServices;
 
 internal static class AssemblyInfo
 {
-    public const string Version = "1.2.3.0";
+    public const string Version = "1.3.0.0";
 }
