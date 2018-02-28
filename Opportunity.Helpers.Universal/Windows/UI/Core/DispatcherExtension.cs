@@ -21,9 +21,9 @@ namespace Windows.UI.Core
         /// </summary>
         /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
         /// <param name="agileCallback">callback to execute</param>
-        /// <returns>an <see cref="IAsyncAction"/> indicates the completion of <paramref name="agileCallback"/></returns>
+        /// <returns>An <see cref="IAsyncAction"/> indicates the completion of <paramref name="agileCallback"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
-        /// is <see langword="null"/></exception>
+        /// is <see langword="null"/>.</exception>
         public static IAsyncAction RunAsync(this CoreDispatcher dispatcher, DispatchedHandler agileCallback)
         {
             if (dispatcher == null)
@@ -31,6 +31,23 @@ namespace Windows.UI.Core
             if (agileCallback == null)
                 throw new ArgumentNullException(nameof(agileCallback));
             return dispatcher.RunAsync(CoreDispatcherPriority.Normal, agileCallback);
+        }
+
+        /// <summary>
+        /// Run <paramref name="agileCallback"/> on UI thread with idle priority.
+        /// </summary>
+        /// <param name="dispatcher"><see cref="CoreDispatcher"/> to run <paramref name="agileCallback"/> on</param>
+        /// <param name="agileCallback">callback to execute</param>
+        /// <returns>An <see cref="IAsyncAction"/> indicates the completion of <paramref name="agileCallback"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> or <paramref name="agileCallback"/>
+        /// is <see langword="null"/>.</exception>
+        public static IAsyncAction RunIdleAsync(this CoreDispatcher dispatcher, DispatchedHandler agileCallback)
+        {
+            if (dispatcher == null)
+                throw new ArgumentNullException(nameof(dispatcher));
+            if (agileCallback == null)
+                throw new ArgumentNullException(nameof(agileCallback));
+            return dispatcher.RunIdleAsync(i => agileCallback());
         }
 
         /// <summary>

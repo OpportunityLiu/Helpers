@@ -6,7 +6,7 @@ namespace Opportunity.Helpers
     public static class EnumHelper
     {
         public static IEnumerable<KeyValuePair<string, T>> GetDefinedValues<T>()
-        where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, IComparable, IFormattable, IConvertible
         {
             var names = EnumExtension.EnumExtentionCache<T>.Names;
             var values = EnumExtension.EnumExtentionCache<T>.Values;

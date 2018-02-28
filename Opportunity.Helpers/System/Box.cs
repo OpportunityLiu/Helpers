@@ -11,7 +11,7 @@ namespace System
     /// Simple box of value.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public class Box<T> : IBox<T>, IList<T>, IReadOnlyList<T>, IList
+    public class Box<T> : IBox<T>
     {
         private T value;
         /// <summary>

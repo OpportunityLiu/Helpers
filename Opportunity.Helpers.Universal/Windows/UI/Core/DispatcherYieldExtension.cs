@@ -22,15 +22,15 @@ namespace Windows.UI.Core
         /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
         /// <param name="priority">priority of callback</param>
         /// <returns>awaiter source for yield</returns>
-        public static DispatcherAwaiterSource Yield(this CoreDispatcher dispatcher, CoreDispatcherPriority priority)
-            => new DispatcherAwaiterSource(dispatcher, priority);
+        public static DispatcherYieldAwaiterSource Yield(this CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+            => new DispatcherYieldAwaiterSource(dispatcher, priority);
 
         /// <summary>
         /// Create an awaiter source that asynchronously yields back to the UI context when awaited with normal priority.
         /// </summary>
         /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
         /// <returns>awaiter source for yield</returns>
-        public static DispatcherAwaiterSource Yield(this CoreDispatcher dispatcher)
+        public static DispatcherYieldAwaiterSource Yield(this CoreDispatcher dispatcher)
             => Yield(dispatcher, CoreDispatcherPriority.Normal);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Windows.UI.Core
         /// </summary>
         /// <param name="dispatcher"><see cref="CoreDispatcher"/> to execute callback on</param>
         /// <returns>awaiter source for yield</returns>
-        public static DispatcherAwaiterSource YieldIdle(this CoreDispatcher dispatcher)
+        public static DispatcherYieldAwaiterSource YieldIdle(this CoreDispatcher dispatcher)
             => Yield(dispatcher, CoreDispatcherPriority.Idle);
     }
 
@@ -46,37 +46,37 @@ namespace Windows.UI.Core
     /// Awaiter source for methods in <see cref="DispatcherExtension"/>.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public struct DispatcherAwaiterSource
+    public struct DispatcherYieldAwaiterSource
     {
-        internal DispatcherAwaiterSource(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+        internal DispatcherYieldAwaiterSource(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (priority > CoreDispatcherPriority.High)
                 priority = CoreDispatcherPriority.High;
             else if (priority < CoreDispatcherPriority.Idle)
                 priority = CoreDispatcherPriority.Idle;
-            this.awaiter = new DispatcherAwaiter(dispatcher, priority);
+            this.awaiter = new DispatcherYieldAwaiter(dispatcher, priority);
         }
 
-        private readonly DispatcherAwaiter awaiter;
+        private readonly DispatcherYieldAwaiter awaiter;
 
         /// <summary>
-        /// Get awaiter of this <see cref="DispatcherAwaiterSource"/>.
+        /// Get awaiter of this <see cref="DispatcherYieldAwaiterSource"/>.
         /// </summary>
-        /// <returns>Awaiter of this <see cref="DispatcherAwaiterSource"/>.</returns>
+        /// <returns>Awaiter of this <see cref="DispatcherYieldAwaiterSource"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public DispatcherAwaiter GetAwaiter() => this.awaiter;
+        public DispatcherYieldAwaiter GetAwaiter() => this.awaiter;
     }
 
     /// <summary>
-    /// Awaiter of <see cref="DispatcherAwaiterSource"/>.
+    /// Awaiter of <see cref="DispatcherYieldAwaiterSource"/>.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public struct DispatcherAwaiter : INotifyCompletion
+    public struct DispatcherYieldAwaiter : INotifyCompletion
     {
         private readonly CoreDispatcher dispatcher;
         private readonly CoreDispatcherPriority priority;
 
-        internal DispatcherAwaiter(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+        internal DispatcherYieldAwaiter(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             this.dispatcher = dispatcher;
             this.priority = priority;

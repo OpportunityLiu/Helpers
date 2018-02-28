@@ -50,12 +50,7 @@
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncInfoBase.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncAction.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncAction{TProgress}.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncOperation{TFrom,TTo,TProgress}.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncOperation{TFrom,TTo}.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncAction{T,TProgress}.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncAction{T}.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastAsyncBase.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~Cast\CastWrapper.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\ContinueExtension.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\CompletedAsyncInfo.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\FaultedAsyncInfo.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\CanceledAsyncInfo.cs" />
