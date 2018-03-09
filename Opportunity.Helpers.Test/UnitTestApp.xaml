@@ -1,8 +1,8 @@
-﻿<Application
-    x:Class="Opportunity.Helpers.Test.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Opportunity.Helpers.Test"
-    RequestedTheme="Light">
+﻿<Application x:Class="Opportunity.Helpers.Test.App"
+             xmlns:helper="using:Opportunity.Helpers.Universal.Xaml"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Opportunity.Helpers.Test"
+             RequestedTheme="{helper:StringResource Path=122}">
 
 </Application>
