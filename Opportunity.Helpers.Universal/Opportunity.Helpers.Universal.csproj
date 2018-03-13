@@ -44,6 +44,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers.Universal\AsyncHelpers\AsExtension.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\AsyncOperationCache.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T,TProgress}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T}.cs" />

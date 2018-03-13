@@ -62,7 +62,16 @@ namespace Opportunity.Helpers
         public static TypeTraitsInfo Of<T>() => Cache<T>.Value;
 
         public static TypeTraitsInfo Of(Type type)
-            => cache.GetOrCreateValue(type ?? throw new ArgumentNullException(nameof(type)), key => new TypeTraitsInfo(key));
+        {
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
+            if (!cache.TryGetValue(type, out var v))
+            {
+                v = new TypeTraitsInfo(type);
+                cache[type] = v;
+            }
+            return v;
+        }
 
         public static TypeTraitsInfo GetInfo(this Type type) => Of(type);
     }

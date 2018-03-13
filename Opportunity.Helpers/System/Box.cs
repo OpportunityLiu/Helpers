@@ -8,11 +8,39 @@ using System.Text;
 namespace System
 {
     /// <summary>
+    /// Factory methods of <see cref="Box{T}"/> and <see cref="ReadOnlyBox{T}"/>.
+    /// </summary>
+    public static class Box
+    {
+        /// <summary>
+        /// Create new instance of <see cref="Box{T}"/>.
+        /// </summary>
+        /// <param name="value">Boxed value.</param>
+        public static Box<T> Create<T>(T value) => new Box<T>(value);
+        /// <summary>
+        /// Create new instance of <see cref="ReadOnlyBox{T}"/>.
+        /// </summary>
+        /// <param name="value">Boxed value.</param>
+        public static ReadOnlyBox<T> CreateReadonly<T>(T value) => new ReadOnlyBox<T>(value);
+    }
+
+    /// <summary>
     /// Simple box of value.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public class Box<T> : IBox<T>
+    public class Box<T> : IBox<T>, IReadOnlyBox<T>
     {
+        /// <summary>
+        /// Create new instance of <see cref="Box{T}"/>.
+        /// </summary>
+        public Box() { }
+
+        /// <summary>
+        /// Create new instance of <see cref="Box{T}"/>.
+        /// </summary>
+        /// <param name="value">Boxed value.</param>
+        public Box(T value) => this.value = value;
+
         private T value;
         /// <summary>
         /// Value in the <see cref="Box{T}"/>
@@ -38,6 +66,7 @@ namespace System
             get => Value;
             set => Value = (T)value;
         }
+        object IReadOnlyBox.Value => Value;
 
         T IList<T>.this[int index]
         {
@@ -71,19 +100,21 @@ namespace System
 
         object ICollection.SyncRoot => this;
 
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
+        /// <inheritdoc/>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        void ICollection<T>.Add(T item) => throw new InvalidOperationException();
-        int IList.Add(object value) => throw new InvalidOperationException();
-        void ICollection<T>.Clear() => throw new InvalidOperationException();
-        void IList.Clear() => throw new InvalidOperationException();
-        void IList<T>.Insert(int index, T item) => throw new InvalidOperationException();
-        void IList.Insert(int index, object value) => throw new InvalidOperationException();
-        bool ICollection<T>.Remove(T item) => throw new InvalidOperationException();
-        void IList.Remove(object value) => throw new InvalidOperationException();
-        void IList<T>.RemoveAt(int index) => throw new InvalidOperationException();
-        void IList.RemoveAt(int index) => throw new InvalidOperationException();
+        void ICollection<T>.Add(T item) => throw new NotSupportedException("Fixed size.");
+        int IList.Add(object value) => throw new NotSupportedException("Fixed size.");
+        void ICollection<T>.Clear() => throw new NotSupportedException("Fixed size.");
+        void IList.Clear() => throw new NotSupportedException("Fixed size.");
+        void IList<T>.Insert(int index, T item) => throw new NotSupportedException("Fixed size.");
+        void IList.Insert(int index, object value) => throw new NotSupportedException("Fixed size.");
+        bool ICollection<T>.Remove(T item) => throw new NotSupportedException("Fixed size.");
+        void IList.Remove(object value) => throw new NotSupportedException("Fixed size.");
+        void IList<T>.RemoveAt(int index) => throw new NotSupportedException("Fixed size.");
+        void IList.RemoveAt(int index) => throw new NotSupportedException("Fixed size.");
 
         bool ICollection<T>.Contains(T item) => EqualityComparer<T>.Default.Equals(Value, item);
         bool IList.Contains(object value)
@@ -105,6 +136,11 @@ namespace System
         {
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
+            if (array is object[] oa)
+            {
+                oa[index] = Value;
+                return;
+            }
             if (!(array is T[] a))
                 throw new ArgumentException("Wrong array type", nameof(array));
             a[index] = Value;

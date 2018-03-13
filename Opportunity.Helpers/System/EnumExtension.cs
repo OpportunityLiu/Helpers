@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace System
 {
+    /// <summary>
+    /// Extension methods for <see cref="Enum"/> types.
+    /// </summary>
     public static class EnumExtension
     {
         internal static class EnumExtentionCache<T>
@@ -146,6 +149,11 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// Convert an enum value to its <see cref="ulong"/> equivalent.
+        /// </summary>
+        /// <param name="that">Value to convert.</param>
+        /// <returns><see cref="ulong"/> equivalent of <paramref name="that"/>.</returns>
         public static ulong ToUInt64(this Enum that)
         {
             if (that == null)
@@ -170,6 +178,12 @@ namespace System
             throw new ArgumentException("Can't convert.");
         }
 
+        /// <summary>
+        /// Convert an <see cref="ulong"/> value to its <typeparamref name="T"/> equivalent.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <param name="that">Value to convert.</param>
+        /// <returns><typeparamref name="T"/> equivalent of <paramref name="that"/>.</returns>
         public static T ToEnum<T>(this ulong that)
             where T : struct, IComparable, IFormattable, IConvertible
         {
