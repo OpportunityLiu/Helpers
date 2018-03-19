@@ -70,17 +70,16 @@ namespace Windows.UI.Core
                     if (action.Status == AsyncStatus.Canceled)
                         return;
                     if (t.IsFaulted)
-                        action.SetException(t.Exception);
+                        action.TrySetException(t.Exception);
                     else if (t.IsCanceled)
                         action.Cancel();
                     else
-                        action.SetResults();
+                        action.TrySetResults();
                 }, returns);
             }
             catch (Exception ex)
             {
-                if (returns.Status == AsyncStatus.Started)
-                    returns.SetException(ex);
+                returns.TrySetException(ex);
             }
         }
 
@@ -161,17 +160,16 @@ namespace Windows.UI.Core
                     if (action.Status == AsyncStatus.Canceled)
                         return;
                     if (t.IsFaulted)
-                        action.SetException(t.Exception);
+                        action.TrySetException(t.Exception);
                     else if (t.IsCanceled)
                         action.Cancel();
                     else
-                        action.SetResults(t.Result);
+                        action.TrySetResults(t.Result);
                 }, returns);
             }
             catch (Exception ex)
             {
-                if (returns.Status == AsyncStatus.Started)
-                    returns.SetException(ex);
+                returns.TrySetException(ex);
             }
         }
 
@@ -255,10 +253,10 @@ namespace Windows.UI.Core
                     {
                     case AsyncStatus.Completed:
                         sender.GetResults();
-                        returns.SetResults();
+                        returns.TrySetResults();
                         break;
                     case AsyncStatus.Error:
-                        returns.SetException(sender.ErrorCode);
+                        returns.TrySetException(sender.ErrorCode);
                         break;
                     case AsyncStatus.Canceled:
                         returns.Cancel();
@@ -268,8 +266,7 @@ namespace Windows.UI.Core
             }
             catch (Exception ex)
             {
-                if (returns.Status == AsyncStatus.Started)
-                    returns.SetException(ex);
+                returns.TrySetException(ex);
             }
         }
 
@@ -355,10 +352,10 @@ namespace Windows.UI.Core
                     switch (e)
                     {
                     case AsyncStatus.Completed:
-                        returns.SetResults(sender.GetResults());
+                        returns.TrySetResults(sender.GetResults());
                         break;
                     case AsyncStatus.Error:
-                        returns.SetException(sender.ErrorCode);
+                        returns.TrySetException(sender.ErrorCode);
                         break;
                     case AsyncStatus.Canceled:
                         returns.Cancel();
@@ -368,8 +365,7 @@ namespace Windows.UI.Core
             }
             catch (Exception ex)
             {
-                if (returns.Status == AsyncStatus.Started)
-                    returns.SetException(ex);
+                returns.TrySetException(ex);
             }
         }
 
@@ -443,15 +439,11 @@ namespace Windows.UI.Core
                 return;
             try
             {
-                var result = agileCallback();
-                if (returns.Status == AsyncStatus.Canceled)
-                    return;
-                returns.SetResults(result);
+                returns.TrySetResults(agileCallback());
             }
             catch (Exception ex)
             {
-                if (returns.Status == AsyncStatus.Started)
-                    returns.SetException(ex);
+                returns.TrySetException(ex);
             }
         }
 

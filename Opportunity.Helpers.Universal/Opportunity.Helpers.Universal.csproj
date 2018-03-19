@@ -67,6 +67,8 @@
     <Compile Include="Helpers.Universal\Xaml\StringResource.cs" />
     <Compile Include="System\EnumDisplayExtension.cs" />
     <Compile Include="System\EnumDisplayNameAttribute.cs" />
+    <Compile Include="Windows\ApplicationModel.DataTransfer\DataPackageExtension.cs" />
+    <Compile Include="Windows\ApplicationModel.DataTransfer\DataTransferManagerExtension.cs" />
     <Compile Include="Windows\UI\Core\DispatcherAwaitableExtension.cs" />
     <Compile Include="Windows\UI\Core\DispatcherYieldExtension.cs" />
     <Compile Include="Windows\UI\Core\DispatcherExtension.cs" />

@@ -30,20 +30,17 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             op.RegisterCancellation(operation.Cancel);
             operation.Completed = (s, e) =>
             {
-                if (op.Status != AsyncStatus.Started)
-                    return;
                 try
                 {
                     var r = continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
                         op.Cancel();
                     else
-                        op.SetResults(r);
+                        op.TrySetResults(r);
                 }
                 catch (Exception ex)
                 {
-                    if (op.Status == AsyncStatus.Started)
-                        op.SetException(ex);
+                    op.TrySetException(ex);
                 }
             };
             return op;
@@ -74,20 +71,17 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             operation.Progress = (s, p) => op.Report(p);
             operation.Completed = (s, e) =>
             {
-                if (op.Status != AsyncStatus.Started)
-                    return;
                 try
                 {
                     var r = continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
                         op.Cancel();
                     else
-                        op.SetResults(r);
+                        op.TrySetResults(r);
                 }
                 catch (Exception ex)
                 {
-                    if (op.Status == AsyncStatus.Started)
-                        op.SetException(ex);
+                    op.TrySetException(ex);
                 }
             };
             return op;
@@ -116,20 +110,17 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             op.RegisterCancellation(operation.Cancel);
             operation.Completed = (s, e) =>
             {
-                if (op.Status != AsyncStatus.Started)
-                    return;
                 try
                 {
                     continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
                         op.Cancel();
                     else
-                        op.SetResults();
+                        op.TrySetResults();
                 }
                 catch (Exception ex)
                 {
-                    if (op.Status == AsyncStatus.Started)
-                        op.SetException(ex);
+                    op.TrySetException(ex);
                 }
             };
             return op;
@@ -160,20 +151,17 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             operation.Progress = (s, p) => op.Report(p);
             operation.Completed = (s, e) =>
             {
-                if (op.Status != AsyncStatus.Started)
-                    return;
                 try
                 {
                     continuation(s);
                     if (e == AsyncStatus.Canceled)
                         op.Cancel();
                     else
-                        op.SetResults();
+                        op.TrySetResults();
                 }
                 catch (Exception ex)
                 {
-                    if (op.Status == AsyncStatus.Started)
-                        op.SetException(ex);
+                    op.TrySetException(ex);
                 }
             };
             return op;

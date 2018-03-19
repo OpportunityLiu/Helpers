@@ -30,12 +30,16 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
         private T results;
-        public void SetResults(T results)
+        public bool TrySetResults(T results)
         {
             var c = this.completed;
-            PreSetResults();
-            this.results = results;
-            c?.Invoke(this, this.Status);
+            if (PreSetResults())
+            {
+                this.results = results;
+                c?.Invoke(this, this.Status);
+                return true;
+            }
+            return false;
         }
 
         public T GetResults()
@@ -44,11 +48,15 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             return this.results;
         }
 
-        public void SetException(Exception ex)
+        public bool TrySetException(Exception ex)
         {
             var c = this.completed;
-            PreSetException(ex);
-            c?.Invoke(this, this.Status);
+            if (PreSetException(ex))
+            {
+                c?.Invoke(this, this.Status);
+                return true;
+            }
+            return false;
         }
 
         public override void Cancel()

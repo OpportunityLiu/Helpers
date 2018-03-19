@@ -8,6 +8,9 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
+    /// <summary>
+    /// Base class for async actions and async operations.
+    /// </summary>
     public abstract class AsyncInfoBase : IAsyncInfo
     {
         internal void PreGetResults()
@@ -43,22 +46,23 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             return true;
         }
 
-        internal void PreSetResults()
+        internal bool PreSetResults()
         {
             var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Completed, (int)AsyncStatus.Started);
-            if (state != AsyncStatus.Started)
-                throw new InvalidOperationException("Cancel, SetResults or SetException has been called.");
+            return state == AsyncStatus.Started;
         }
 
-        internal void PreSetException(Exception ex)
+        internal bool PreSetException(Exception ex)
         {
-            if (ex == null)
+            if (ex is null)
                 throw new ArgumentNullException(nameof(ex));
             var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Error, (int)AsyncStatus.Started);
-            if (state != AsyncStatus.Started)
-                throw new InvalidOperationException("Cancel, SetResults or SetException has been called.");
-            if (Interlocked.CompareExchange(ref this.error, ex, null) != null)
-                throw new InvalidOperationException("Cancel, SetResults or SetException has been called.");
+            if (state == AsyncStatus.Started)
+            {
+                this.error = ex;
+                return true;
+            }
+            return false;
         }
 
         private Exception error;
@@ -75,11 +79,20 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
+        /// <summary>
+        /// Id of current <see cref="IAsyncInfo"/>.
+        /// </summary>
         public uint Id => unchecked((uint)GetHashCode());
 
         private int status = (int)AsyncStatus.Started;
+        /// <summary>
+        /// Status of current <see cref="IAsyncInfo"/>.
+        /// </summary>
         public AsyncStatus Status => (AsyncStatus)this.status;
 
+        /// <summary>
+        /// End this <see cref="IAsyncInfo"/>.
+        /// </summary>
         public virtual void Close()
         {
             (this.error as IDisposable)?.Dispose();
