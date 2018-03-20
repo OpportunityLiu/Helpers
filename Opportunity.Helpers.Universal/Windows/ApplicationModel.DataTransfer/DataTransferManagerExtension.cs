@@ -80,6 +80,7 @@ namespace Windows.ApplicationModel.DataTransfer
                         try
                         {
                             args.Request.Data = await task;
+                            this.action.TrySetResults();
                         }
                         finally
                         {
