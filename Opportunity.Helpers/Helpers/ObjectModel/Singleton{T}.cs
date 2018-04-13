@@ -8,7 +8,7 @@ namespace Opportunity.Helpers.ObjectModel
     /// <summary>
     /// Simple singlelon.
     /// </summary>
-    public static class Singlelon
+    public static class Singleton
     {
         private static class Storage<T>
             where T : class

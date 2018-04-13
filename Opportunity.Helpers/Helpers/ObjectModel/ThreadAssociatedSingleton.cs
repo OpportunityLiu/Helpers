@@ -6,7 +6,7 @@ namespace Opportunity.Helpers.ObjectModel
     /// <summary>
     /// Simple singlelon with <see cref="ThreadStaticAttribute"/> backing field.
     /// </summary>
-    public static class ThreadLocalSinglelon
+    public static class ThreadLocalSingleton
     {
         private static class Storage<T>
             where T : class
