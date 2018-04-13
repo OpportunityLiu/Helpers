@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace System
 {
@@ -21,6 +23,7 @@ namespace System
                 TUnderlyingType = Enum.GetUnderlyingType(TType);
                 var info = TType.GetTypeInfo();
                 IsFlag = info.GetCustomAttribute<FlagsAttribute>() != null;
+
                 var names = Enum.GetNames(TType);
                 var values = (T[])Enum.GetValues(TType);
                 var count = names.Length;
@@ -150,6 +153,44 @@ namespace System
         }
 
         /// <summary>
+        /// Get defined values of the enum.
+        /// </summary>
+        /// <typeparam name="T">Type of enum.</typeparam>
+        /// <returns>Defined values of the enum.</returns>
+        public static IEnumerable<KeyValuePair<string, T>> GetDefinedValues<T>()
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            var names = EnumExtentionCache<T>.Names;
+            var values = EnumExtentionCache<T>.Values;
+            for (var i = 0; i < names.Length; i++)
+            {
+                yield return new KeyValuePair<string, T>(names[i], values[i]);
+            }
+        }
+
+        /// <summary>
+        /// Get underlying type of the enum.
+        /// </summary>
+        /// <typeparam name="T">Type of enum.</typeparam>
+        /// <returns>Underlying type of the enum.</returns>
+        public static Type GetUnderlyingType<T>()
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            return EnumExtentionCache<T>.TUnderlyingType;
+        }
+
+        /// <summary>
+        /// Check whether the enum is flag.
+        /// </summary>
+        /// <typeparam name="T">Type of enum.</typeparam>
+        /// <returns><see langword="true"/> if is flag.</returns>
+        public static bool IsFlag<T>()
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            return EnumExtentionCache<T>.IsFlag;
+        }
+
+        /// <summary>
         /// Convert an enum value to its <see cref="ulong"/> equivalent.
         /// </summary>
         /// <param name="that">Value to convert.</param>
@@ -190,18 +231,38 @@ namespace System
             return (T)Enum.ToObject(typeof(T), that);
         }
 
+        /// <summary>
+        /// Get string representaion of enum value.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <param name="that">Enum value.</param>
+        /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
+        /// <returns>String representaion of enum value.</returns>
         public static string ToFriendlyNameString<T>(this T that, Func<T, string> nameProvider)
             where T : struct, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
         }
 
+        /// <summary>
+        /// Get string representaion of enum value.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <param name="that">Enum value.</param>
+        /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
+        /// <returns>String representaion of enum value.</returns>
         public static string ToFriendlyNameString<T>(this T that, Func<string, string> nameProvider)
             where T : struct, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
         }
 
+        /// <summary>
+        /// Check whether the enum is defined.
+        /// </summary>
+        /// <param name="that">Enum value to check.</param>
+        /// <typeparam name="T">Type of enum.</typeparam>
+        /// <returns><see langword="true"/> if is defined.</returns>
         public static bool IsDefined<T>(this T that)
             where T : struct, IComparable, IFormattable, IConvertible
         {
