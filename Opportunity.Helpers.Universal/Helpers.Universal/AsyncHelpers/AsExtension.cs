@@ -7,6 +7,9 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
+    /// <summary>
+    /// As adapters for <see cref="IAsyncInfo"/>
+    /// </summary>
     public static class AsExtension
     {
         public static IAsyncAction AsAsyncAction<T>(this IAsyncOperation<T> operation)

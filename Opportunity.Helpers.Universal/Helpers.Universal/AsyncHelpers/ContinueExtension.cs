@@ -4,6 +4,9 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
+    /// <summary>
+    /// ContinueWith adapters for <see cref="IAsyncInfo"/>
+    /// </summary>
     public static class ContinueExtension
     {
         public static IAsyncOperation<TTo> ContinueWith<TFrom, TTo>(this IAsyncOperation<TFrom> operation, Func<IAsyncOperation<TFrom>, TTo> continuation)
@@ -86,6 +89,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             };
             return op;
         }
+
         public static IAsyncAction ContinueWith<T>(this IAsyncOperation<T> operation, Action<IAsyncOperation<T>> continuation)
         {
             if (operation == null)

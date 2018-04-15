@@ -31,6 +31,7 @@ namespace Opportunity.Helpers.Test
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            var f = Helpers.Universal.ApiInfo.DeviceFamily;
         }
 
         public CoreDispatcher Dispatcher;
@@ -49,6 +50,7 @@ namespace Opportunity.Helpers.Test
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+            var cc = Windows.ApplicationModel.Resources.Core.ResourceContext.GetForCurrentView().QualifierValues.ToArray();
             this.Dispatcher = Window.Current.Dispatcher;
             Frame rootFrame = Window.Current.Content as Frame;
 
