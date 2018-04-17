@@ -42,6 +42,22 @@ namespace Opportunity.Helpers.Universal
         public static string DeviceFamily { get; } = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
         /// <summary>
+        /// Get current version of device.
+        /// </summary>
+        public static Version DeviceFamilyVersion { get; } = getVersion();
+
+        private static Version getVersion()
+        {
+            var sv = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
+            var v = ulong.Parse(sv);
+            var v1 = (int)((v & 0xFFFF000000000000L) >> 48);
+            var v2 = (int)((v & 0x0000FFFF00000000L) >> 32);
+            var v3 = (int)((v & 0x00000000FFFF0000L) >> 16);
+            var v4 = (int)((v & 0x000000000000FFFFL) >> 00);
+            return new Version(v1, v2, v3, v4);
+        }
+
+        /// <summary>
         /// Is current device family <c>"Windows.Mobile"</c>.
         /// </summary>
         public static bool IsMobile { get; } = IsDeviceFamily("Windows.Mobile");

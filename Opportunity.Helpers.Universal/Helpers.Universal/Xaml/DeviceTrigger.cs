@@ -13,69 +13,61 @@ namespace Opportunity.Helpers.Universal.Xaml
     public sealed class DeviceTrigger : StateTriggerBase
     {
         /// <summary>
-        /// Device family to deactive the trigger.
+        /// Active status when current device family matches <see cref="DeviceFamily"/>.
         /// </summary>
-        public string DeactiveDeviceFamily
+        public bool ActiveStatusOfDeviceFamily
         {
-            get => (string)GetValue(DeactiveDeviceFamilyProperty);
-            set => SetValue(DeactiveDeviceFamilyProperty, value);
+            get => (bool)GetValue(ActiveStatusOfDeviceFamilyProperty);
+            set => SetValue(ActiveStatusOfDeviceFamilyProperty, value);
         }
 
         /// <summary>
-        /// Indentify <see cref="DeactiveDeviceFamily"/> dependency property.
+        /// Indentify <see cref="ActiveStatusOfDeviceFamily"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty DeactiveDeviceFamilyProperty =
-            DependencyProperty.Register(nameof(DeactiveDeviceFamily), typeof(string), typeof(DeviceTrigger), new PropertyMetadata("", DeactiveDeviceFamilyPropertyChanged));
+        public static readonly DependencyProperty ActiveStatusOfDeviceFamilyProperty =
+            DependencyProperty.Register(nameof(ActiveStatusOfDeviceFamily), typeof(bool), typeof(DeviceTrigger), new PropertyMetadata(true, ActiveStatusOfDeviceFamilyPropertyChanged));
 
-        private static void DeactiveDeviceFamilyPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+        private static void ActiveStatusOfDeviceFamilyPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
         {
-            var oldValue = (string)e.OldValue;
-            var newValue = (string)e.NewValue;
-            var sender = (DeviceTrigger)dp;
-            if (string.Equals(newValue, oldValue, StringComparison.OrdinalIgnoreCase))
+            var oldValue = (bool)e.OldValue;
+            var newValue = (bool)e.NewValue;
+            if (oldValue == newValue)
                 return;
+            var sender = (DeviceTrigger)dp;
             sender.set();
         }
 
         /// <summary>
-        /// Device family to active the trigger.
+        /// Device family of the trigger.
         /// </summary>
-        public string ActiveDeviceFamily
+        public string DeviceFamily
         {
-            get => (string)GetValue(ActiveDeviceFamilyProperty);
-            set => SetValue(ActiveDeviceFamilyProperty, value);
+            get => (string)GetValue(DeviceFamilyProperty);
+            set => SetValue(DeviceFamilyProperty, value);
         }
 
         /// <summary>
-        /// Indentify <see cref="ActiveDeviceFamily"/> dependency property.
+        /// Indentify <see cref="DeviceFamily"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ActiveDeviceFamilyProperty =
-            DependencyProperty.Register(nameof(ActiveDeviceFamily), typeof(string), typeof(DeviceTrigger), new PropertyMetadata("", ActiveDeviceFamilyPropertyChanged));
+        public static readonly DependencyProperty DeviceFamilyProperty =
+            DependencyProperty.Register(nameof(DeviceFamily), typeof(string), typeof(DeviceTrigger), new PropertyMetadata("", DeviceFamilyPropertyChanged));
 
-        private static void ActiveDeviceFamilyPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+        private static void DeviceFamilyPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
         {
             var oldValue = (string)e.OldValue;
             var newValue = (string)e.NewValue;
-            var sender = (DeviceTrigger)dp;
             if (string.Equals(newValue, oldValue, StringComparison.OrdinalIgnoreCase))
                 return;
+            var sender = (DeviceTrigger)dp;
             sender.set();
         }
 
         private void set()
         {
-            var a = ActiveDeviceFamily;
-            var d = DeactiveDeviceFamily;
-            var an = string.IsNullOrWhiteSpace(a);
-            var dn = string.IsNullOrWhiteSpace(d);
-            if (an && dn)
-                SetActive(true);
-            else if (dn)
-                SetActive(ApiInfo.IsDeviceFamily(a));
-            else if (an)
-                SetActive(ApiInfo.IsDeviceFamily(d));
+            if (ActiveStatusOfDeviceFamily)
+                SetActive(ApiInfo.IsDeviceFamily(DeviceFamily));
             else
-                throw new InvalidOperationException(nameof(ActiveDeviceFamily) + " and " + nameof(DeactiveDeviceFamily) + " set at same time.");
+                SetActive(!ApiInfo.IsDeviceFamily(DeviceFamily));
         }
     }
 }

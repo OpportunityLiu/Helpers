@@ -9,6 +9,13 @@ namespace Windows.ApplicationModel.DataTransfer
     /// </summary>
     public static class DataTransferManagerExtension
     {
+        /// <summary>
+        /// Show share UI.
+        /// </summary>
+        /// <param name="manager"><see cref="DataTransferManager"/> of sharing.</param>
+        /// <param name="dataPackage"><see cref="DataPackage"/> to share.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="manager"/> or <paramref name="dataPackage"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Sharing is not supported.</exception>
         public static IAsyncAction ShareAsync(this DataTransferManager manager, DataPackage dataPackage)
         {
             if (dataPackage is null)
@@ -16,6 +23,13 @@ namespace Windows.ApplicationModel.DataTransfer
             return ShareAsync(manager, () => AsyncOperation<DataPackage>.CreateCompleted(dataPackage));
         }
 
+        /// <summary>
+        /// Show share UI.
+        /// </summary>
+        /// <param name="manager"><see cref="DataTransferManager"/> of sharing.</param>
+        /// <param name="dataPackageProvider">Provides <see cref="DataPackage"/> to share.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="manager"/> or <paramref name="dataPackageProvider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Sharing is not supported.</exception>
         public static IAsyncAction ShareAsync(this DataTransferManager manager, Func<DataPackage> dataPackageProvider)
         {
             if (dataPackageProvider is null)
@@ -23,6 +37,13 @@ namespace Windows.ApplicationModel.DataTransfer
             return ShareAsync(manager, () => AsyncOperation<DataPackage>.CreateCompleted(dataPackageProvider()));
         }
 
+        /// <summary>
+        /// Show share UI.
+        /// </summary>
+        /// <param name="manager"><see cref="DataTransferManager"/> of sharing.</param>
+        /// <param name="dataPackageProvider">Provides <see cref="DataPackage"/> to share.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="manager"/> or <paramref name="dataPackageProvider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">Sharing is not supported.</exception>
         public static IAsyncAction ShareAsync(this DataTransferManager manager, Func<IAsyncOperation<DataPackage>> dataPackageProvider)
         {
             if (manager is null)

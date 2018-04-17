@@ -32,6 +32,7 @@ namespace Opportunity.Helpers.Test
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             var f = Helpers.Universal.ApiInfo.DeviceFamily;
+            PackageVersion
         }
 
         public CoreDispatcher Dispatcher;
