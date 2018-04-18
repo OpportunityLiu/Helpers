@@ -28,12 +28,16 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         AsyncOperationCompletedHandler<T> IAsyncOperation<T>.Completed
         {
             get => this.completed;
-            set => this.completed += value;
+            set
+            {
+                this.completed -= value;
+                this.completed += value;
+            }
         }
 
         public override void Close()
         {
-            if (this.action == null)
+            if (this.action is null)
                 return;
             this.action.Close();
             this.action = null;

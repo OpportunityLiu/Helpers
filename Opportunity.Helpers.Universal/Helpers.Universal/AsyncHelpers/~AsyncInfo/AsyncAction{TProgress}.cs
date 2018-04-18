@@ -27,38 +27,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        public bool TrySetResults()
-        {
-            var c = this.completed;
-            if (PreSetResults())
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
-
-        public void GetResults() => PreGetResults();
-
-        public bool TrySetException(Exception ex)
-        {
-            var c = this.completed;
-            if (PreSetException(ex))
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
-
-        public override void Cancel()
-        {
-            var c = this.completed;
-            if (PreCancel())
-                c?.Invoke(this, this.Status);
-        }
-
-        public void Report(TProgress value) => this.progress?.Invoke(this, value);
+        internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
         private AsyncActionProgressHandler<TProgress> progress;
         public AsyncActionProgressHandler<TProgress> Progress
@@ -66,9 +35,29 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.progress;
             set
             {
+                if (Status != AsyncStatus.Started)
+                    return;
                 if (Interlocked.CompareExchange(ref this.progress, value, null) != null)
                     throw new InvalidOperationException("Progress has been set.");
             }
+        }
+
+        public void Report(TProgress progress)
+        {
+            if (Status != AsyncStatus.Started)
+                return;
+            this.progress?.Invoke(this, progress);
+        }
+
+        public bool TrySetResults() => TrySetCompleted();
+
+        public void GetResults() => GetCompleted();
+
+        public override void Close()
+        {
+            base.Close();
+            this.progress = null;
+            this.completed = null;
         }
     }
 }

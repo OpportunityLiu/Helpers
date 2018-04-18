@@ -37,7 +37,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 
         public override void Close()
         {
-            if (this.action == null)
+            if (this.action is null)
                 return;
             this.action.Close();
             this.action = null;

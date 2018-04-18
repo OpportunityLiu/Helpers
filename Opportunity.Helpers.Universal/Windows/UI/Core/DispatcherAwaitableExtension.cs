@@ -72,7 +72,7 @@ namespace Windows.UI.Core
                     if (t.IsFaulted)
                         action.TrySetException(t.Exception);
                     else if (t.IsCanceled)
-                        action.Cancel();
+                        action.TrySetCanceled();
                     else
                         action.TrySetResults();
                 }, returns);
@@ -162,7 +162,7 @@ namespace Windows.UI.Core
                     if (t.IsFaulted)
                         action.TrySetException(t.Exception);
                     else if (t.IsCanceled)
-                        action.Cancel();
+                        action.TrySetCanceled();
                     else
                         action.TrySetResults(t.Result);
                 }, returns);
@@ -259,7 +259,7 @@ namespace Windows.UI.Core
                         returns.TrySetException(sender.ErrorCode);
                         break;
                     case AsyncStatus.Canceled:
-                        returns.Cancel();
+                        returns.TrySetCanceled();
                         break;
                     }
                 };
@@ -358,7 +358,7 @@ namespace Windows.UI.Core
                         returns.TrySetException(sender.ErrorCode);
                         break;
                     case AsyncStatus.Canceled:
-                        returns.Cancel();
+                        returns.TrySetCanceled();
                         break;
                     }
                 };

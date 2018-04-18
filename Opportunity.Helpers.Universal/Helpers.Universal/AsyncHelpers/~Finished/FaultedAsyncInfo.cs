@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -42,10 +43,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        void IAsyncAction.GetResults() => throw ErrorCode;
-        void IAsyncActionWithProgress<TProgress>.GetResults() => throw ErrorCode;
-        T IAsyncOperation<T>.GetResults() => throw ErrorCode;
-        T IAsyncOperationWithProgress<T, TProgress>.GetResults() => throw ErrorCode;
+        void IAsyncAction.GetResults() => ExceptionDispatchInfo.Capture(ErrorCode).Throw();
+        void IAsyncActionWithProgress<TProgress>.GetResults() => ExceptionDispatchInfo.Capture(ErrorCode).Throw();
+        T IAsyncOperation<T>.GetResults() { ExceptionDispatchInfo.Capture(ErrorCode).Throw(); return default; }
+        T IAsyncOperationWithProgress<T, TProgress>.GetResults() { ExceptionDispatchInfo.Capture(ErrorCode).Throw(); return default; }
 
         AsyncActionCompletedHandler IAsyncAction.Completed { get => null; set => value?.Invoke(this, AsyncStatus.Error); }
         AsyncActionWithProgressCompletedHandler<TProgress> IAsyncActionWithProgress<TProgress>.Completed { get => null; set => value?.Invoke(this, AsyncStatus.Error); }

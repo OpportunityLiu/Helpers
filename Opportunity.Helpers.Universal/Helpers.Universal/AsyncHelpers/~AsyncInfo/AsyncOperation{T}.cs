@@ -32,41 +32,28 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
+        internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
+
         private T results;
         public bool TrySetResults(T results)
         {
-            var c = this.completed;
-            if (PreSetResults())
+            if (Status != AsyncStatus.Started)
+                return false;
+
+            var oldv = this.results;
+            this.results = results;
+            if (TrySetCompleted())
             {
-                this.results = results;
-                c?.Invoke(this, this.Status);
                 return true;
             }
+            this.results = oldv;
             return false;
         }
 
         public T GetResults()
         {
-            PreGetResults();
+            GetCompleted();
             return this.results;
-        }
-
-        public bool TrySetException(Exception ex)
-        {
-            var c = this.completed;
-            if (PreSetException(ex))
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
-
-        public override void Cancel()
-        {
-            var c = this.completed;
-            if (PreCancel())
-                c?.Invoke(this, this.Status);
         }
 
         public override void Close()
@@ -74,6 +61,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             base.Close();
             (this.results as IDisposable)?.Dispose();
             this.results = default;
+            this.completed = null;
         }
     }
 }

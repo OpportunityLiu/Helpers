@@ -82,7 +82,7 @@ namespace Windows.ApplicationModel.DataTransfer
                     {
                     case AsyncStatus.Canceled:
                         task.Close();
-                        this.action.Cancel();
+                        this.action.TrySetCanceled();
                         break;
                     case AsyncStatus.Completed:
                         args.Request.Data = task.GetResults();

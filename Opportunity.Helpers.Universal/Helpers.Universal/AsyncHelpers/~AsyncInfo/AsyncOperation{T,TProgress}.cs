@@ -29,51 +29,8 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                     throw new InvalidOperationException("Completed has been set.");
             }
         }
-        private T results;
-        public bool TrySetResults(T results)
-        {
-            var c = this.completed;
-            if (PreSetResults())
-            {
-                this.results = results;
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
 
-        public T GetResults()
-        {
-            PreGetResults();
-            return this.results;
-        }
-
-        public bool TrySetException(Exception ex)
-        {
-            var c = this.completed;
-            if (PreSetException(ex))
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
-
-        public override void Cancel()
-        {
-            var c = this.completed;
-            if (PreCancel())
-                c?.Invoke(this, this.Status);
-        }
-
-        public override void Close()
-        {
-            base.Close();
-            (this.results as IDisposable)?.Dispose();
-            this.results = default;
-        }
-
-        public void Report(TProgress value) => this.progress?.Invoke(this, value);
+        internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
         private AsyncOperationProgressHandler<T, TProgress> progress;
         public AsyncOperationProgressHandler<T, TProgress> Progress
@@ -81,9 +38,49 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             get => this.progress;
             set
             {
+                if (Status != AsyncStatus.Started)
+                    return;
                 if (Interlocked.CompareExchange(ref this.progress, value, null) != null)
                     throw new InvalidOperationException("Progress has been set.");
             }
+        }
+
+        public void Report(TProgress progress)
+        {
+            if (Status != AsyncStatus.Started)
+                return;
+            this.progress?.Invoke(this, progress);
+        }
+
+        private T results;
+        public bool TrySetResults(T results)
+        {
+            if (Status != AsyncStatus.Started)
+                return false;
+
+            var oldv = this.results;
+            this.results = results;
+            if (TrySetCompleted())
+            {
+                return true;
+            }
+            this.results = oldv;
+            return false;
+        }
+
+        public T GetResults()
+        {
+            GetCompleted();
+            return this.results;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            (this.results as IDisposable)?.Dispose();
+            this.results = default;
+            this.completed = null;
+            this.progress = null;
         }
     }
 }

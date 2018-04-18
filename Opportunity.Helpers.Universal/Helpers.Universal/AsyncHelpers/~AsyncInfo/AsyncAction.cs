@@ -29,35 +29,16 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        public bool TrySetResults()
-        {
-            var c = this.completed;
-            if (PreSetResults())
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
+        internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
-        public void GetResults() => PreGetResults();
+        public bool TrySetResults() => TrySetCompleted();
 
-        public bool TrySetException(Exception ex)
-        {
-            var c = this.completed;
-            if (PreSetException(ex))
-            {
-                c?.Invoke(this, this.Status);
-                return true;
-            }
-            return false;
-        }
+        public void GetResults() => GetCompleted();
 
-        public override void Cancel()
+        public override void Close()
         {
-            var c = this.completed;
-            if (PreCancel())
-                c?.Invoke(this, this.Status);
+            base.Close();
+            this.completed = null;
         }
     }
 }

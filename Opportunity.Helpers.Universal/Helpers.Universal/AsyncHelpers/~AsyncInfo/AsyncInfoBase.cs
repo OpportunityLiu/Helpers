@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,22 +14,15 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     /// </summary>
     public abstract class AsyncInfoBase : IAsyncInfo
     {
-        internal void PreGetResults()
-        {
-            switch (this.status)
-            {
-            case (int)AsyncStatus.Canceled:
-                throw new OperationCanceledException();
-            case (int)AsyncStatus.Completed:
-                return;
-            case (int)AsyncStatus.Error:
-                throw ErrorCode;
-            default:
-                throw new InvalidOperationException("The async info has not finished yet.");
-            }
-        }
+        internal AsyncInfoBase() { }
 
-        public abstract void Cancel();
+        public void Cancel()
+        {
+            if (this.Status != AsyncStatus.Started)
+                return;
+            var cb = Interlocked.Exchange(ref this.CanceledCallback, null);
+            cb?.Invoke();
+        }
 
         public void RegisterCancellation(Action CanceledCallback)
         {
@@ -37,22 +31,43 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 
         private Action CanceledCallback;
 
-        internal bool PreCancel()
+        internal abstract void OnCompleted();
+
+        internal void GetCompleted()
+        {
+            switch (this.status)
+            {
+            case (int)AsyncStatus.Canceled:
+                throw new OperationCanceledException();
+            case (int)AsyncStatus.Completed:
+                return;
+            case (int)AsyncStatus.Error:
+                ExceptionDispatchInfo.Capture(ErrorCode).Throw();
+                return;
+            default:
+                throw new InvalidOperationException("The async info has not finished yet.");
+            }
+        }
+
+        internal bool TrySetCompleted()
+        {
+            var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Completed, (int)AsyncStatus.Started);
+            if (state != AsyncStatus.Started)
+                return false;
+            OnCompleted();
+            return true;
+        }
+
+        public bool TrySetCanceled()
         {
             var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Canceled, (int)AsyncStatus.Started);
             if (state != AsyncStatus.Started)
                 return false;
-            this.CanceledCallback?.Invoke();
+            OnCompleted();
             return true;
         }
 
-        internal bool PreSetResults()
-        {
-            var state = (AsyncStatus)Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Completed, (int)AsyncStatus.Started);
-            return state == AsyncStatus.Started;
-        }
-
-        internal bool PreSetException(Exception ex)
+        public bool TrySetException(Exception ex)
         {
             if (ex is null)
                 throw new ArgumentNullException(nameof(ex));
@@ -60,6 +75,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             if (state == AsyncStatus.Started)
             {
                 this.error = ex;
+                OnCompleted();
                 return true;
             }
             return false;
@@ -73,7 +89,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 if (this.status != (int)AsyncStatus.Error)
                     return null;
                 var error = this.error;
-                if (error == null)
+                if (error is null)
                     return new Exception();
                 return error;
             }
@@ -97,6 +113,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         {
             (this.error as IDisposable)?.Dispose();
             this.error = null;
+            Interlocked.CompareExchange(ref this.status, (int)AsyncStatus.Completed, (int)AsyncStatus.Started);
         }
     }
 }

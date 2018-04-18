@@ -35,19 +35,27 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         AsyncActionWithProgressCompletedHandler<TProgress> IAsyncActionWithProgress<TProgress>.Completed
         {
             get => this.completed;
-            set => this.completed += value;
+            set
+            {
+                this.completed -= value;
+                this.completed += value;
+            }
         }
 
         private AsyncActionProgressHandler<TProgress> progress;
         AsyncActionProgressHandler<TProgress> IAsyncActionWithProgress<TProgress>.Progress
         {
             get => this.progress;
-            set => this.progress += value;
+            set
+            {
+                this.progress -= value;
+                this.progress += value;
+            }
         }
 
         public override void Close()
         {
-            if (this.action == null)
+            if (this.action is null)
                 return;
             this.action.Close();
             this.action = null;

@@ -39,7 +39,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 try
                 {
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else if (operation.Status == AsyncStatus.Error)
                         op.TrySetException(operation.ErrorCode);
                     else
@@ -81,7 +81,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 try
                 {
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else if (operation.Status == AsyncStatus.Error)
                         op.TrySetException(operation.ErrorCode);
                     else
@@ -127,7 +127,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 try
                 {
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else if (operation.Status == AsyncStatus.Error)
                         op.TrySetException(operation.ErrorCode);
                     else
@@ -173,7 +173,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 try
                 {
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else if (operation.Status == AsyncStatus.Error)
                         op.TrySetException(operation.ErrorCode);
                     else
@@ -219,7 +219,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 try
                 {
                     if (action.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else if (action.Status == AsyncStatus.Error)
                         op.TrySetException(action.ErrorCode);
                     else

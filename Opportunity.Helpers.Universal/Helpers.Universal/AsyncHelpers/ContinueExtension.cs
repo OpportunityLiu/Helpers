@@ -37,7 +37,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 {
                     var r = continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else
                         op.TrySetResults(r);
                 }
@@ -78,7 +78,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 {
                     var r = continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else
                         op.TrySetResults(r);
                 }
@@ -118,7 +118,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 {
                     continuation(s);
                     if (operation.Status == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else
                         op.TrySetResults();
                 }
@@ -159,7 +159,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
                 {
                     continuation(s);
                     if (e == AsyncStatus.Canceled)
-                        op.Cancel();
+                        op.TrySetCanceled();
                     else
                         op.TrySetResults();
                 }
