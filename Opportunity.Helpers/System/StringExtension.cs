@@ -85,5 +85,27 @@ namespace System
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+
+        /// <summary>
+        /// Coalesce value of <paramref name="operand1"/> and <paramref name="operand2"/>.
+        /// </summary>
+        /// <param name="operand1">The first operand.</param>
+        /// <param name="operand2">The second operand.</param>
+        /// <returns>If <paramref name="operand1"/> is <see langword="null"/> or <see cref="string.Empty"/>, <paramref name="operand2"/>,
+        /// otherwise, <paramref name="operand1"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string CoalesceNullOrEmpty(this string operand1, string operand2)
+            => string.IsNullOrEmpty(operand1) ? operand2 : operand1;
+
+        /// <summary>
+        /// Coalesce value of <paramref name="operand1"/> and <paramref name="operand2"/>.
+        /// </summary>
+        /// <param name="operand1">The first operand.</param>
+        /// <param name="operand2">The second operand.</param>
+        /// <returns>If <paramref name="operand1"/> is <see langword="null"/> or whitespaces, <paramref name="operand2"/>,
+        /// otherwise, <paramref name="operand1"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string CoalesceNullOrWhiteSpace(this string operand1, string operand2)
+            => string.IsNullOrWhiteSpace(operand1) ? operand2 : operand1;
     }
 }

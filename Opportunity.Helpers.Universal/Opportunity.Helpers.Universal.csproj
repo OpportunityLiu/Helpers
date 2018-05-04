@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="Helpers.Universal\ApiInfo.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\AsExtension.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionBase.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperationBase{T}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\AsyncOperationCache.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T,TProgress}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T}.cs" />

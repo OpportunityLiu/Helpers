@@ -6,7 +6,10 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
-    public sealed class AsyncAction : AsyncInfoBase, IAsyncAction
+    /// <summary>
+    /// Implemetation of <see cref="IAsyncAction"/>.
+    /// </summary>
+    public sealed class AsyncAction : AsyncActionBase, IAsyncAction
     {
         public static IAsyncAction CreateCompleted() => CompletedAsyncInfo<VoidResult, VoidProgress>.Instanse;
         public static IAsyncAction CreateFault() => FaultedAsyncInfo<VoidResult, VoidProgress>.Instanse;
@@ -14,6 +17,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         public static IAsyncAction CreateCanceled() => CanceledAsyncInfo<VoidResult, VoidProgress>.Instanse;
 
         private AsyncActionCompletedHandler completed;
+        /// <summary>
+        /// Notifier for completion.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Completed"/> has been set.</exception>
         public AsyncActionCompletedHandler Completed
         {
             get => this.completed;
@@ -31,10 +38,9 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 
         internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
-        public bool TrySetResults() => TrySetCompleted();
-
-        public void GetResults() => GetCompleted();
-
+        /// <summary>
+        /// End the action.
+        /// </summary>
         public override void Close()
         {
             base.Close();

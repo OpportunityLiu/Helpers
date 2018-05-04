@@ -4,8 +4,10 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
-
-    public sealed class AsyncOperation<T, TProgress> : AsyncInfoBase, IAsyncOperationWithProgress<T, TProgress>, IProgress<TProgress>
+    /// <summary>
+    /// Implemetation of <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+    /// </summary>
+    public sealed class AsyncOperation<T, TProgress> : AsyncOperationBase<T>, IAsyncOperationWithProgress<T, TProgress>, IProgress<TProgress>
     {
         public static IAsyncOperationWithProgress<T, TProgress> CreateCompleted() => CompletedAsyncInfo<T, TProgress>.Instanse;
         public static IAsyncOperationWithProgress<T, TProgress> CreateCompleted(T results)
@@ -15,6 +17,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         public static IAsyncOperationWithProgress<T, TProgress> CreateCanceled() => CanceledAsyncInfo<T, TProgress>.Instanse;
 
         private AsyncOperationWithProgressCompletedHandler<T, TProgress> completed;
+        /// <summary>
+        /// Notifier for completion.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Completed"/> has been set.</exception>
         public AsyncOperationWithProgressCompletedHandler<T, TProgress> Completed
         {
             get => this.completed;
@@ -33,6 +39,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
         private AsyncOperationProgressHandler<T, TProgress> progress;
+        /// <summary>
+        /// Notifier for progress.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Progress"/> has been set.</exception>
         public AsyncOperationProgressHandler<T, TProgress> Progress
         {
             get => this.progress;
@@ -45,6 +55,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
+        /// <summary>
+        /// Report progress.
+        /// </summary>
+        /// <param name="progress">Progress of operation.</param>
         public void Report(TProgress progress)
         {
             if (Status != AsyncStatus.Started)
@@ -52,33 +66,12 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             this.progress?.Invoke(this, progress);
         }
 
-        private T results;
-        public bool TrySetResults(T results)
-        {
-            if (Status != AsyncStatus.Started)
-                return false;
-
-            var oldv = this.results;
-            this.results = results;
-            if (TrySetCompleted())
-            {
-                return true;
-            }
-            this.results = oldv;
-            return false;
-        }
-
-        public T GetResults()
-        {
-            GetCompleted();
-            return this.results;
-        }
-
+        /// <summary>
+        /// End the operation.
+        /// </summary>
         public override void Close()
         {
             base.Close();
-            (this.results as IDisposable)?.Dispose();
-            this.results = default;
             this.completed = null;
             this.progress = null;
         }

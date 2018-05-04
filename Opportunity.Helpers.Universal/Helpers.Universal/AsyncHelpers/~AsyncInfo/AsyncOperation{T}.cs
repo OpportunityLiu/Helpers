@@ -7,7 +7,10 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
-    public sealed class AsyncOperation<T> : AsyncInfoBase, IAsyncOperation<T>
+    /// <summary>
+    /// Implemetation of <see cref="IAsyncOperation{TResult}"/>.
+    /// </summary>
+    public sealed class AsyncOperation<T> : AsyncOperationBase<T>, IAsyncOperation<T>
     {
         public static IAsyncOperation<T> CreateCompleted() => CompletedAsyncInfo<T, VoidProgress>.Instanse;
         public static IAsyncOperation<T> CreateCompleted(T results)
@@ -17,6 +20,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         public static IAsyncOperation<T> CreateCanceled() => CanceledAsyncInfo<T, VoidProgress>.Instanse;
 
         private AsyncOperationCompletedHandler<T> completed;
+        /// <summary>
+        /// Notifier for completion.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Completed"/> has been set.</exception>
         public AsyncOperationCompletedHandler<T> Completed
         {
             get => this.completed;
@@ -34,33 +41,12 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 
         internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
-        private T results;
-        public bool TrySetResults(T results)
-        {
-            if (Status != AsyncStatus.Started)
-                return false;
-
-            var oldv = this.results;
-            this.results = results;
-            if (TrySetCompleted())
-            {
-                return true;
-            }
-            this.results = oldv;
-            return false;
-        }
-
-        public T GetResults()
-        {
-            GetCompleted();
-            return this.results;
-        }
-
+        /// <summary>
+        /// End the operation.
+        /// </summary>
         public override void Close()
         {
             base.Close();
-            (this.results as IDisposable)?.Dispose();
-            this.results = default;
             this.completed = null;
         }
     }

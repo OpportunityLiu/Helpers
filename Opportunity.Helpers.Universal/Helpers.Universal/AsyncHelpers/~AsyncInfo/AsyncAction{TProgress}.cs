@@ -4,7 +4,10 @@ using Windows.Foundation;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
-    public sealed class AsyncAction<TProgress> : AsyncInfoBase, IAsyncActionWithProgress<TProgress>, IProgress<TProgress>
+    /// <summary>
+    /// Implemetation of <see cref="IAsyncActionWithProgress{TProgress}"/>.
+    /// </summary>
+    public sealed class AsyncAction<TProgress> : AsyncActionBase, IAsyncActionWithProgress<TProgress>, IProgress<TProgress>
     {
         public static IAsyncActionWithProgress<TProgress> CreateCompleted() => CompletedAsyncInfo<VoidResult, TProgress>.Instanse;
         public static IAsyncActionWithProgress<TProgress> CreateFault() => FaultedAsyncInfo<VoidResult, TProgress>.Instanse;
@@ -12,6 +15,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         public static IAsyncActionWithProgress<TProgress> CreateCanceled() => CanceledAsyncInfo<VoidResult, TProgress>.Instanse;
 
         private AsyncActionWithProgressCompletedHandler<TProgress> completed;
+        /// <summary>
+        /// Notifier for completion.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Completed"/> has been set.</exception>
         public AsyncActionWithProgressCompletedHandler<TProgress> Completed
         {
             get => this.completed;
@@ -30,6 +37,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         internal override void OnCompleted() => this.completed?.Invoke(this, this.Status);
 
         private AsyncActionProgressHandler<TProgress> progress;
+        /// <summary>
+        /// Notifier for progress.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="Progress"/> has been set.</exception>
         public AsyncActionProgressHandler<TProgress> Progress
         {
             get => this.progress;
@@ -42,6 +53,10 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
+        /// <summary>
+        /// Report progress.
+        /// </summary>
+        /// <param name="progress">Progress of action.</param>
         public void Report(TProgress progress)
         {
             if (Status != AsyncStatus.Started)
@@ -49,10 +64,9 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             this.progress?.Invoke(this, progress);
         }
 
-        public bool TrySetResults() => TrySetCompleted();
-
-        public void GetResults() => GetCompleted();
-
+        /// <summary>
+        /// End the action.
+        /// </summary>
         public override void Close()
         {
             base.Close();

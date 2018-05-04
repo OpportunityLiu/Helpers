@@ -16,7 +16,7 @@ namespace Opportunity.Helpers.Universal
         {
             try
             {
-                // try default context first.
+                // try default context first, ie. "Resources".
                 var r = ResourceLoader.GetForViewIndependentUse();
                 if (r != null)
                     return r;

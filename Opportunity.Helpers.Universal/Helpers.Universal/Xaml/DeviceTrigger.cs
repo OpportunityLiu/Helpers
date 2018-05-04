@@ -13,7 +13,7 @@ namespace Opportunity.Helpers.Universal.Xaml
     public sealed class DeviceTrigger : StateTriggerBase
     {
         /// <summary>
-        /// Active status when current device family matches <see cref="DeviceFamily"/>.
+        /// Active status when current device family matches <see cref="DeviceFamily"/>, default value is <see langword="true"/>.
         /// </summary>
         public bool ActiveStatusOfDeviceFamily
         {

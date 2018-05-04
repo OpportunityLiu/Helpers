@@ -34,9 +34,9 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         {
             get
             {
-                if (this.error == null)
+                if (this.error is null)
                     return new Exception();
-                if (this.error is Exception ex)
+                else if (this.error is Exception ex)
                     return ex;
                 else
                     return new Exception(this.error.ToString());
