@@ -14,7 +14,7 @@ namespace System
     public static class EnumExtension
     {
         internal static class EnumExtentionCache<T>
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
             static EnumExtentionCache()
             {
@@ -158,7 +158,7 @@ namespace System
         /// <typeparam name="T">Type of enum.</typeparam>
         /// <returns>Defined values of the enum.</returns>
         public static IEnumerable<KeyValuePair<string, T>> GetDefinedValues<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
             var names = EnumExtentionCache<T>.Names;
             var values = EnumExtentionCache<T>.Values;
@@ -174,7 +174,7 @@ namespace System
         /// <typeparam name="T">Type of enum.</typeparam>
         /// <returns>Underlying type of the enum.</returns>
         public static Type GetUnderlyingType<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
             return EnumExtentionCache<T>.TUnderlyingType;
         }
@@ -185,9 +185,36 @@ namespace System
         /// <typeparam name="T">Type of enum.</typeparam>
         /// <returns><see langword="true"/> if is flag.</returns>
         public static bool IsFlag<T>()
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
             return EnumExtentionCache<T>.IsFlag;
+        }
+
+        /// <summary>
+        /// Convert an enum value to its <see cref="ulong"/> equivalent.
+        /// </summary>
+        /// <param name="that">Value to convert.</param>
+        /// <returns><see cref="ulong"/> equivalent of <paramref name="that"/>.</returns>
+        public static ulong ToUInt64<T>(this T that)
+            where T : struct, Enum, IComparable, IConvertible, IFormattable
+        {
+            switch (that.GetTypeCode())
+            {
+            case TypeCode.SByte:
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+            case TypeCode.Int64:
+                return unchecked((ulong)that.ToInt64(Globalization.CultureInfo.InvariantCulture));
+
+            case TypeCode.Byte:
+            case TypeCode.UInt16:
+            case TypeCode.UInt32:
+            case TypeCode.UInt64:
+            case TypeCode.Boolean:
+            case TypeCode.Char:
+                return that.ToUInt64(Globalization.CultureInfo.InvariantCulture);
+            }
+            throw new ArgumentException("Can't convert.");
         }
 
         /// <summary>
@@ -226,7 +253,7 @@ namespace System
         /// <param name="that">Value to convert.</param>
         /// <returns><typeparamref name="T"/> equivalent of <paramref name="that"/>.</returns>
         public static T ToEnum<T>(this ulong that)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             return (T)Enum.ToObject(typeof(T), that);
         }
@@ -239,7 +266,7 @@ namespace System
         /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
         /// <returns>String representaion of enum value.</returns>
         public static string ToFriendlyNameString<T>(this T that, Func<T, string> nameProvider)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
         }
@@ -252,7 +279,7 @@ namespace System
         /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
         /// <returns>String representaion of enum value.</returns>
         public static string ToFriendlyNameString<T>(this T that, Func<string, string> nameProvider)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
         }
@@ -264,7 +291,7 @@ namespace System
         /// <typeparam name="T">Type of enum.</typeparam>
         /// <returns><see langword="true"/> if is defined.</returns>
         public static bool IsDefined<T>(this T that)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             return EnumExtentionCache<T>.GetIndex(that) >= 0;
         }

@@ -14,7 +14,7 @@ namespace System
     public static class EnumDisplayExtension
     {
         private static class EnumExtentionCache<T>
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             static EnumExtentionCache()
             {
@@ -43,7 +43,7 @@ namespace System
         /// <returns>The display text.</returns>
         /// <see cref="EnumDisplayNameAttribute"/>
         public static string ToDisplayNameString<T>(this T that)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
             return EnumExtension.ToFriendlyNameString(that, v => EnumExtentionCache<T>.DisplayNames[v]);
         }

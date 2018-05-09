@@ -47,6 +47,7 @@
     <Compile Include="Helpers.Universal\ApiInfo.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\AsExtension.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionBase.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionStateMachine.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperationBase{T}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\AsyncOperationCache.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T,TProgress}.cs" />
@@ -87,6 +88,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks.Extensions">
+      <Version>4.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

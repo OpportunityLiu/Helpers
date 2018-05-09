@@ -10,6 +10,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     /// <summary>
     /// Implemetation of <see cref="IAsyncOperation{TResult}"/>.
     /// </summary>
+    [AsyncMethodBuilder(typeof(AsyncOperationMethodBuilder<>))]
     public sealed class AsyncOperation<T> : AsyncOperationBase<T>, IAsyncOperation<T>
     {
         public static IAsyncOperation<T> CreateCompleted() => CompletedAsyncInfo<T, VoidProgress>.Instanse;
