@@ -4,7 +4,6 @@ using System.Threading;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
-
     public struct AsyncActionMethodBuilder
     {
         public static AsyncActionMethodBuilder Create() => default;
@@ -35,20 +34,9 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         }
 
         private AsyncAction task;
-        public AsyncAction Task
-        {
-            get
-            {
-                var t = this.task;
-                if (t is null)
-                {
-                    t = new AsyncAction();
-                    this.task = t;
-                }
-                return t;
-            }
-        }
+        public AsyncAction Task => LazyInitializer.EnsureInitialized(ref this.task);
     }
+
     public struct AsyncOperationMethodBuilder<T>
     {
         public static AsyncOperationMethodBuilder<T> Create() => default;
@@ -79,18 +67,6 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         }
 
         private AsyncOperation<T> task;
-        public AsyncOperation<T> Task
-        {
-            get
-            {
-                var t = this.task;
-                if (t is null)
-                {
-                    t = new AsyncOperation<T>();
-                    this.task = t;
-                }
-                return t;
-            }
-        }
+        public AsyncOperation<T> Task => LazyInitializer.EnsureInitialized(ref this.task);
     }
 }
