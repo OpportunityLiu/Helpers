@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opportunity.Helpers", "Oppo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opportunity.Helpers.Universal", "Opportunity.Helpers.Universal\Opportunity.Helpers.Universal.csproj", "{0F67234A-B2EC-4982-A996-58258B6B7178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opportunity.Helpers.Test", "Opportunity.Helpers.Test\Opportunity.Helpers.Test.csproj", "{ADC68EE2-F382-4969-BD1B-5EB81E1D3200}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opportunity.Helpers.Test", "Opportunity.Helpers.Test\Opportunity.Helpers.Test.csproj", "{6DD9BB33-339C-42A4-855E-7161990414CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,12 @@ Global
 		{0F67234A-B2EC-4982-A996-58258B6B7178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F67234A-B2EC-4982-A996-58258B6B7178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F67234A-B2EC-4982-A996-58258B6B7178}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADC68EE2-F382-4969-BD1B-5EB81E1D3200}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{ADC68EE2-F382-4969-BD1B-5EB81E1D3200}.Debug|Any CPU.Build.0 = Debug|x64
-		{ADC68EE2-F382-4969-BD1B-5EB81E1D3200}.Debug|Any CPU.Deploy.0 = Debug|x64
-		{ADC68EE2-F382-4969-BD1B-5EB81E1D3200}.Release|Any CPU.ActiveCfg = Release|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Debug|Any CPU.Build.0 = Debug|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Debug|Any CPU.Deploy.0 = Debug|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Release|Any CPU.ActiveCfg = Release|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Release|Any CPU.Build.0 = Release|x86
+		{6DD9BB33-339C-42A4-855E-7161990414CC}.Release|Any CPU.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

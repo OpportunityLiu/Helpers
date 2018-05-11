@@ -83,5 +83,27 @@ namespace Opportunity.Helpers.Test
             Assert.AreEqual(Tint.N, ulong.MaxValue.ToEnum<Tint>());
             Assert.AreEqual(Tlong.N, ulong.MaxValue.ToEnum<Tlong>());
         }
+
+        [TestMethod]
+        public void IsDefinedTest()
+        {
+            Assert.IsTrue(Tbyte.D.IsDefined());
+            Assert.IsTrue(Tsbyte.D.IsDefined());
+            Assert.IsTrue(Tint.D.IsDefined());
+            Assert.IsTrue(Tuint.D.IsDefined());
+            Assert.IsTrue(Tlong.D.IsDefined());
+            Assert.IsTrue(Tulong.D.IsDefined());
+
+            Assert.IsTrue(Tbyte.P.IsDefined());
+            Assert.IsTrue(Tsbyte.P.IsDefined());
+            Assert.IsTrue(Tint.P.IsDefined());
+            Assert.IsTrue(Tuint.P.IsDefined());
+            Assert.IsTrue(Tlong.P.IsDefined());
+            Assert.IsTrue(Tulong.P.IsDefined());
+
+            Assert.IsTrue(Tsbyte.N.IsDefined());
+            Assert.IsTrue(Tint.N.IsDefined());
+            Assert.IsTrue(Tlong.N.IsDefined());
+        }
     }
 }

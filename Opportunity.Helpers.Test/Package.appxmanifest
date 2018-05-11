@@ -5,15 +5,15 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   IgnorableNamespaces="uap mp">
 
-  <Identity Name="6cf585ce-d98e-4822-8b71-4b1c5e9a66d3"
-            Publisher="CN=liuzh"
+  <Identity Name="0226318f-47b0-4337-bac4-c21ce7ea48e2"
+            Publisher="CN=lzy"
             Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="6cf585ce-d98e-4822-8b71-4b1c5e9a66d3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="0226318f-47b0-4337-bac4-c21ce7ea48e2" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Opportunity.Helpers.Test</DisplayName>
-    <PublisherDisplayName>liuzh</PublisherDisplayName>
+    <PublisherDisplayName>lzy</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -41,5 +41,6 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
   </Capabilities>
 </Package>
