@@ -19,7 +19,7 @@ namespace System
             static EnumExtentionCache()
             {
                 TType = typeof(T);
-                TTypeCode = Convert.GetTypeCode(default(T));
+                TTypeCode = default(T).GetTypeCode();
                 TUnderlyingType = Enum.GetUnderlyingType(TType);
                 var info = TType.GetTypeInfo();
                 IsFlag = info.GetCustomAttribute<FlagsAttribute>() != null;
@@ -102,7 +102,7 @@ namespace System
 
             public static int GetIndex(T that)
             {
-                return Array.BinarySearch(Values, that);
+                return Array.IndexOf(Values, that);
             }
 
             private static string ToFriendlyNameStringForFlagsFormat(T that, Func<int, string> nameProvider)
