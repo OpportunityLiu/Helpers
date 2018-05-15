@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public struct AsyncActionMethodBuilder
     {
         public static AsyncActionMethodBuilder Create() => default;
@@ -37,6 +39,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
         public AsyncAction Task => LazyInitializer.EnsureInitialized(ref this.task);
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public struct AsyncOperationMethodBuilder<T>
     {
         public static AsyncOperationMethodBuilder<T> Create() => default;
