@@ -52,8 +52,6 @@ namespace System.Linq
                 return col.Count <= 0;
             if (collection is ICollection nCol)
                 return nCol.Count <= 0;
-            if (collection is IReadOnlyCollection<T> roCol)
-                return roCol.Count <= 0;
             foreach (var item in collection)
             {
                 return false;
@@ -125,8 +123,6 @@ namespace System.Linq
                 col.CopyTo(array, arrayIndex);
                 return;
             }
-            if (collection is IReadOnlyCollection<T> rcol && arrayIndex + rcol.Count > array.Length)
-                throw new ArgumentException("Not enough space for copying.");
             try
             {
                 foreach (var item in collection)
