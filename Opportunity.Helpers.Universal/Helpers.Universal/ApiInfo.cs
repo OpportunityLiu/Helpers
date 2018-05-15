@@ -50,10 +50,10 @@ namespace Opportunity.Helpers.Universal
         {
             var sv = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
             var v = ulong.Parse(sv);
-            var v1 = (int)((v & 0xFFFF000000000000L) >> 48);
-            var v2 = (int)((v & 0x0000FFFF00000000L) >> 32);
-            var v3 = (int)((v & 0x00000000FFFF0000L) >> 16);
-            var v4 = (int)((v & 0x000000000000FFFFL) >> 00);
+            var v1 = (int)((v & 0xFFFF000000000000UL) >> 48);
+            var v2 = (int)((v & 0x0000FFFF00000000UL) >> 32);
+            var v3 = (int)((v & 0x00000000FFFF0000UL) >> 16);
+            var v4 = (int)((v & 0x000000000000FFFFUL) >> 00);
             return new Version(v1, v2, v3, v4);
         }
 

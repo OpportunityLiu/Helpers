@@ -9,11 +9,33 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     /// </summary>
     public sealed class AsyncOperation<T, TProgress> : AsyncOperationBase<T>, IAsyncOperationWithProgress<T, TProgress>, IProgress<TProgress>
     {
+        /// <summary>
+        /// Create a complated <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+        /// </summary>
+        /// <returns>A complated <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.</returns>
         public static IAsyncOperationWithProgress<T, TProgress> CreateCompleted() => CompletedAsyncInfo<T, TProgress>.Instanse;
+        /// <summary>
+        /// Create a complated <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+        /// </summary>
+        /// <param name="results">Results of the operation.</param>
+        /// <returns>A complated <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.</returns>
         public static IAsyncOperationWithProgress<T, TProgress> CreateCompleted(T results)
             => AsyncOperationCache<TProgress>.TryGetCacehd(results) ?? CompletedAsyncInfo<T, TProgress>.Create(results);
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+        /// </summary>
+        /// <returns>A faulted ended <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.</returns>
         public static IAsyncOperationWithProgress<T, TProgress> CreateFault() => FaultedAsyncInfo<T, TProgress>.Instanse;
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+        /// </summary>
+        /// <param name="ex">Fault of the operation.</param>
+        /// <returns>A faulted ended <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.</returns>
         public static IAsyncOperationWithProgress<T, TProgress> CreateFault(Exception ex) => FaultedAsyncInfo<T, TProgress>.Create(ex);
+        /// <summary>
+        /// Create a canceled <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.
+        /// </summary>
+        /// <returns>A canceled <see cref="IAsyncOperationWithProgress{TResult, TProgress}"/>.</returns>
         public static IAsyncOperationWithProgress<T, TProgress> CreateCanceled() => CanceledAsyncInfo<T, TProgress>.Instanse;
 
         private AsyncOperationWithProgressCompletedHandler<T, TProgress> completed;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -9,20 +10,13 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     internal sealed class MulticastAsyncAction : MulticastAsyncBase, IAsyncAction
     {
-        private IAsyncAction action;
-        protected override IAsyncInfo GetWrapped() => this.action;
-
-        public MulticastAsyncAction(IAsyncAction action)
+        public MulticastAsyncAction(IAsyncAction action) : base(action)
         {
-            this.action = action ?? throw new ArgumentNullException(nameof(action));
-            this.action.Completed = this.action_Completed;
+            action.Completed = this.action_Completed;
         }
 
         private void action_Completed(IAsyncAction sender, AsyncStatus e)
-        {
-            if (this.action != null)
-                this.completed?.Invoke(this, e);
-        }
+            => this.completed?.Invoke(this, e);
 
         private AsyncActionCompletedHandler completed;
         AsyncActionCompletedHandler IAsyncAction.Completed
@@ -35,15 +29,12 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        public override void Close()
+        protected override void CloseOverride()
         {
-            if (this.action is null)
-                return;
-            this.action.Close();
-            this.action = null;
             this.completed = null;
         }
 
-        void IAsyncAction.GetResults() => this.action.GetResults();
+        void IAsyncAction.GetResults()
+            => ((IAsyncAction)Wrapped).GetResults();
     }
 }

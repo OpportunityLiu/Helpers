@@ -13,7 +13,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     {
         public static FaultedAsyncInfo<T, TProgress> Instanse { get; } = new FaultedAsyncInfo<T, TProgress>(null);
         public static FaultedAsyncInfo<T, TProgress> Create(Exception ex)
-            => new FaultedAsyncInfo<T, TProgress>(ex ?? throw new ArgumentNullException(nameof(ex)));
+            => ex is null ? Instanse : new FaultedAsyncInfo<T, TProgress>(ex);
 
         private object error;
 

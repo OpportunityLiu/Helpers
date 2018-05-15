@@ -31,11 +31,19 @@ namespace Windows.ApplicationModel
         {
             return new PackageVersion
             {
-                Major = (ushort)version.Major,
-                Minor = (ushort)version.Minor,
-                Build = (ushort)version.Build,
-                Revision = (ushort)version.Revision
+                Major = getNumber(version.Major),
+                Minor = getNumber(version.Minor),
+                Build = getNumber(version.Build),
+                Revision = getNumber(version.Revision),
             };
+
+            ushort getNumber(int num)
+            {
+                if (num < 0)
+                    // that part of version is undefined
+                    return 0;
+                return (ushort)num;
+            }
         }
 
         /// <summary>

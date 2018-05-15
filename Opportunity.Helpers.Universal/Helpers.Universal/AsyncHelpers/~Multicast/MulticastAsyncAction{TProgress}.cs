@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -9,27 +10,17 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     internal sealed class MulticastAsyncAction<TProgress> : MulticastAsyncBase, IAsyncActionWithProgress<TProgress>
     {
-        private IAsyncActionWithProgress<TProgress> action;
-        protected override IAsyncInfo GetWrapped() => this.action;
-
-        public MulticastAsyncAction(IAsyncActionWithProgress<TProgress> action)
+        public MulticastAsyncAction(IAsyncActionWithProgress<TProgress> action) : base(action)
         {
-            this.action = action ?? throw new ArgumentNullException(nameof(action));
-            this.action.Completed = this.action_Completed;
-            this.action.Progress = this.action_Progress;
+            action.Completed = this.action_Completed;
+            action.Progress = this.action_Progress;
         }
 
         private void action_Completed(IAsyncActionWithProgress<TProgress> sender, AsyncStatus e)
-        {
-            if (this.action != null)
-                this.completed?.Invoke(this, e);
-        }
+            => this.completed?.Invoke(this, e);
 
         private void action_Progress(IAsyncActionWithProgress<TProgress> asyncInfo, TProgress progressInfo)
-        {
-            if (this.action != null)
-                this.progress?.Invoke(this, progressInfo);
-        }
+            => this.progress?.Invoke(this, progressInfo);
 
         private AsyncActionWithProgressCompletedHandler<TProgress> completed;
         AsyncActionWithProgressCompletedHandler<TProgress> IAsyncActionWithProgress<TProgress>.Completed
@@ -53,16 +44,13 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        public override void Close()
+        protected override void CloseOverride()
         {
-            if (this.action is null)
-                return;
-            this.action.Close();
-            this.action = null;
             this.completed = null;
             this.progress = null;
         }
 
-        void IAsyncActionWithProgress<TProgress>.GetResults() => this.action.GetResults();
+        void IAsyncActionWithProgress<TProgress>.GetResults()
+            => ((IAsyncActionWithProgress<TProgress>)Wrapped).GetResults();
     }
 }

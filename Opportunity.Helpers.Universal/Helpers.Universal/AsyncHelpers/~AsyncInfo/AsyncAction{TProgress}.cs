@@ -9,9 +9,26 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     /// </summary>
     public sealed class AsyncAction<TProgress> : AsyncActionBase, IAsyncActionWithProgress<TProgress>, IProgress<TProgress>
     {
+        /// <summary>
+        /// Create a complated <see cref="IAsyncActionWithProgress{TProgress}"/>.
+        /// </summary>
+        /// <returns>A complated <see cref="IAsyncActionWithProgress{TProgress}"/>.</returns>
         public static IAsyncActionWithProgress<TProgress> CreateCompleted() => CompletedAsyncInfo<VoidResult, TProgress>.Instanse;
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncActionWithProgress{TProgress}"/>.
+        /// </summary>
+        /// <returns>A faulted ended <see cref="IAsyncActionWithProgress{TProgress}"/>.</returns>
         public static IAsyncActionWithProgress<TProgress> CreateFault() => FaultedAsyncInfo<VoidResult, TProgress>.Instanse;
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncActionWithProgress{TProgress}"/>.
+        /// </summary>
+        /// <param name="ex">Fault of the action.</param>
+        /// <returns>A faulted ended <see cref="IAsyncActionWithProgress{TProgress}"/>.</returns>
         public static IAsyncActionWithProgress<TProgress> CreateFault(Exception ex) => FaultedAsyncInfo<VoidResult, TProgress>.Create(ex);
+        /// <summary>
+        /// Create a canceled <see cref="IAsyncActionWithProgress{TProgress}"/>.
+        /// </summary>
+        /// <returns>A canceled <see cref="IAsyncActionWithProgress{TProgress}"/>.</returns>
         public static IAsyncActionWithProgress<TProgress> CreateCanceled() => CanceledAsyncInfo<VoidResult, TProgress>.Instanse;
 
         private AsyncActionWithProgressCompletedHandler<TProgress> completed;

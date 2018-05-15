@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -9,20 +10,13 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
 {
     internal sealed class MulticastAsyncOperation<T> : MulticastAsyncBase, IAsyncOperation<T>
     {
-        private IAsyncOperation<T> action;
-        protected override IAsyncInfo GetWrapped() => this.action;
-
-        public MulticastAsyncOperation(IAsyncOperation<T> operation)
+        public MulticastAsyncOperation(IAsyncOperation<T> operation) : base(operation)
         {
-            this.action = operation ?? throw new ArgumentNullException(nameof(operation));
-            this.action.Completed = this.action_Completed;
+            operation.Completed = this.operation_Completed;
         }
 
-        private void action_Completed(IAsyncOperation<T> sender, AsyncStatus e)
-        {
-            if (this.action != null)
-                this.completed?.Invoke(this, e);
-        }
+        private void operation_Completed(IAsyncOperation<T> sender, AsyncStatus e)
+            => this.completed?.Invoke(this, e);
 
         private AsyncOperationCompletedHandler<T> completed;
         AsyncOperationCompletedHandler<T> IAsyncOperation<T>.Completed
@@ -35,15 +29,12 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
             }
         }
 
-        public override void Close()
+        protected override void CloseOverride()
         {
-            if (this.action is null)
-                return;
-            this.action.Close();
-            this.action = null;
             this.completed = null;
         }
 
-        T IAsyncOperation<T>.GetResults() => this.action.GetResults();
+        T IAsyncOperation<T>.GetResults()
+            => ((IAsyncOperation<T>)Wrapped).GetResults();
     }
 }

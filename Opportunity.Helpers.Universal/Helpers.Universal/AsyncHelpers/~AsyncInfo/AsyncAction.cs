@@ -12,9 +12,26 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     [AsyncMethodBuilder(typeof(AsyncActionMethodBuilder))]
     public sealed class AsyncAction : AsyncActionBase, IAsyncAction
     {
+        /// <summary>
+        /// Create a complated <see cref="IAsyncAction"/>.
+        /// </summary>
+        /// <returns>A complated <see cref="IAsyncAction"/>.</returns>
         public static IAsyncAction CreateCompleted() => CompletedAsyncInfo<VoidResult, VoidProgress>.Instanse;
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncAction"/>.
+        /// </summary>
+        /// <returns>A faulted ended <see cref="IAsyncAction"/>.</returns>
         public static IAsyncAction CreateFault() => FaultedAsyncInfo<VoidResult, VoidProgress>.Instanse;
+        /// <summary>
+        /// Create a faulted ended <see cref="IAsyncAction"/>.
+        /// </summary>
+        /// <param name="ex">Fault of the action.</param>
+        /// <returns>A faulted ended <see cref="IAsyncAction"/>.</returns>
         public static IAsyncAction CreateFault(Exception ex) => FaultedAsyncInfo<VoidResult, VoidProgress>.Create(ex);
+        /// <summary>
+        /// Create a canceled <see cref="IAsyncAction"/>.
+        /// </summary>
+        /// <returns>A canceled <see cref="IAsyncAction"/>.</returns>
         public static IAsyncAction CreateCanceled() => CanceledAsyncInfo<VoidResult, VoidProgress>.Instanse;
 
         private AsyncActionCompletedHandler completed;

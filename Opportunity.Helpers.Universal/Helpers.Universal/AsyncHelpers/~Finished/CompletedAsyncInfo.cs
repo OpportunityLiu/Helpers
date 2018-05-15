@@ -12,11 +12,7 @@ namespace Opportunity.Helpers.Universal.AsyncHelpers
     {
         public static CompletedAsyncInfo<T, TProgress> Instanse { get; } = new CompletedAsyncInfo<T, TProgress>(default);
         public static CompletedAsyncInfo<T, TProgress> Create(T results)
-        {
-            if (results == null)
-                return Instanse;
-            return new CompletedAsyncInfo<T, TProgress>(results);
-        }
+            => results == null ? Instanse : new CompletedAsyncInfo<T, TProgress>(results);
 
         private readonly T results;
 
