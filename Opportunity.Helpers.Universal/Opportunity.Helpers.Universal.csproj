@@ -47,8 +47,9 @@
     <Compile Include="Helpers.Universal\ApiInfo.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\AsExtension.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionBase.cs" />
-    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionStateMachine.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncActionMethodBuilder.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperationBase{T}.cs" />
+    <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperationMethodBuilder.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~Finished\AsyncOperationCache.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T,TProgress}.cs" />
     <Compile Include="Helpers.Universal\AsyncHelpers\~AsyncInfo\AsyncOperation{T}.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Helpers.Universal\AsyncHelpers\PollingAsyncWrapper.cs" />
     <Compile Include="Helpers.Universal\LocalizedStrings.cs" />
     <Compile Include="Helpers.Universal\Xaml\DeviceTrigger.cs" />
+    <Compile Include="Helpers.Universal\Xaml\SizeTrigger.cs" />
     <Compile Include="Helpers.Universal\Xaml\StringResource.cs" />
     <Compile Include="System\EnumDisplayExtension.cs" />
     <Compile Include="System\EnumDisplayNameAttribute.cs" />
