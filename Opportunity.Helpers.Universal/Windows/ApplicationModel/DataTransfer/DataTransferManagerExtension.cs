@@ -67,8 +67,8 @@ namespace Windows.ApplicationModel.DataTransfer
                 this.action = action;
             }
 
-            private Func<IAsyncOperation<DataPackage>> dataPackageProvider;
-            private AsyncAction action;
+            private readonly Func<IAsyncOperation<DataPackage>> dataPackageProvider;
+            private readonly AsyncAction action;
 
             private async void T_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
             {
