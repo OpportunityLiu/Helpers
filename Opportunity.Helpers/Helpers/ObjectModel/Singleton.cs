@@ -35,6 +35,19 @@ namespace Opportunity.Helpers.ObjectModel
             where T : class
             => Interlocked.Exchange(ref Storage<T>.Value, value);
 
+        private static T getOrCreate<T>(Func<T> activator)
+            where T : class
+        {
+            var v = Storage<T>.Value;
+            if (v != null)
+                return v;
+            v = activator() ?? throw new ArgumentException($"Call of activator({activator}) returns null.");
+            var r = Interlocked.CompareExchange(ref Storage<T>.Value, v, null);
+            if (r != null)
+                return r;
+            return v;
+        }
+
         /// <summary>
         /// Get singleton value of <typeparamref name="T"/>,
         /// if <see langword="null"/>, a new instance of <typeparamref name="T"/> will be created.
@@ -43,19 +56,7 @@ namespace Opportunity.Helpers.ObjectModel
         /// <returns>Current value of singleton.</returns>
         public static T GetOrCreate<T>()
             where T : class, new()
-        {
-            if (Storage<T>.Value is null)
-            {
-                lock (typeof(Storage<T>))
-                {
-                    if (Storage<T>.Value is null)
-                    {
-                        Storage<T>.Value = new T();
-                    }
-                }
-            }
-            return Storage<T>.Value;
-        }
+            => getOrCreate(() => new T());
 
         /// <summary>
         /// Get singleton value of <typeparamref name="T"/>,
@@ -71,17 +72,7 @@ namespace Opportunity.Helpers.ObjectModel
         {
             if (activator is null)
                 throw new ArgumentNullException(nameof(activator));
-            if (Storage<T>.Value is null)
-            {
-                lock (typeof(Storage<T>))
-                {
-                    if (Storage<T>.Value is null)
-                    {
-                        Storage<T>.Value = activator() ?? throw new ArgumentException($"Call of activator({activator}) returns null.");
-                    }
-                }
-            }
-            return Storage<T>.Value;
+            return getOrCreate(activator);
         }
 
         /// <summary>
@@ -97,17 +88,7 @@ namespace Opportunity.Helpers.ObjectModel
         {
             if (createdValue is null)
                 throw new ArgumentNullException(nameof(createdValue));
-            if (Storage<T>.Value is null)
-            {
-                lock (typeof(Storage<T>))
-                {
-                    if (Storage<T>.Value is null)
-                    {
-                        Storage<T>.Value = createdValue;
-                    }
-                }
-            }
-            return Storage<T>.Value;
+            return getOrCreate(() => createdValue);
         }
 
         /// <summary>

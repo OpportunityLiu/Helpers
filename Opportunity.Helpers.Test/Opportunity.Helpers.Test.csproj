@@ -101,6 +101,7 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SingletonTest.cs" />
     <Compile Include="ActionBuilderTest.cs" />
     <Compile Include="AsyncCacheTest.cs" />
     <Compile Include="CollectionTest.cs" />
