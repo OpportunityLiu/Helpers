@@ -10,7 +10,7 @@ namespace Opportunity.Helpers.ObjectModel
     /// Simple box of value with change notification.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public class ObservableBox<T> : BoxBase<T>, IBox<T>, IReadOnlyBox<T>, INotifyPropertyChanged, INotifyCollectionChanged
+    public class ObservableBox<T> : Box<T>, INotifyPropertyChanged, INotifyCollectionChanged
     {
         /// <summary>
         /// Create new instance of <see cref="ObservableBox{T}"/>.
@@ -23,35 +23,16 @@ namespace Opportunity.Helpers.ObjectModel
         /// <param name="value">Boxed value.</param>
         public ObservableBox(T value) : base(value) { }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        internal override bool IsReadOnly => false;
-
         /// <summary>
-        /// Value in the <see cref="ObservableBox{T}"/>
+        /// Actual value in the box.
         /// </summary>
-        public T Value
+        protected override T BoxedValue
         {
-            get => this.InternalValue;
+            get => base.BoxedValue;
             set
             {
-                this.InternalValue = value;
+                this.BoxedValue = value;
                 OnValueChanged();
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        object IBox.Value
-        {
-            get => Value;
-            set => Value = (T)value;
-        }
-        T IList<T>.this[int index]
-        {
-            get => index == 0 ? this.InternalValue : throw new ArgumentOutOfRangeException(nameof(index));
-            set
-            {
-                if (index != 0)
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                this.Value = value;
             }
         }
 

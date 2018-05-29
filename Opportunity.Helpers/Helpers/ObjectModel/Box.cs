@@ -9,7 +9,7 @@ namespace Opportunity.Helpers.ObjectModel
     /// Simple box of value.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public class Box<T> : BoxBase<T>, IBox<T>
+    public class Box<T> : ReadOnlyBox<T>, IBox<T>
     {
         /// <summary>
         /// Create new instance of <see cref="Box{T}"/>.
@@ -22,13 +22,15 @@ namespace Opportunity.Helpers.ObjectModel
         /// <param name="value">Boxed value.</param>
         public Box(T value) : base(value) { }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        internal override bool IsReadOnly => false;
+        /// <summary>
+        /// <see langword="true"/> if the box is read only.
+        /// </summary>
+        public override bool IsReadOnly => false;
 
         /// <summary>
-        /// Value in the <see cref="Box{T}"/>
+        /// Value in the <see cref="Box{T}"/>.
         /// </summary>
-        public T Value { get => this.InternalValue; set => this.InternalValue = value; }
+        public new T Value { get => this.BoxedValue; set => this.BoxedValue = value; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         object IBox.Value
@@ -42,7 +44,7 @@ namespace Opportunity.Helpers.ObjectModel
     /// Simple box of value.
     /// </summary>
     /// <typeparam name="T">Value type</typeparam>
-    public interface IBox<T> : IBox, IList<T>, IReadOnlyList<T>
+    public interface IBox<T> : IBox
     {
         /// <summary>
         /// Value in the <see cref="IBox{T}"/>
