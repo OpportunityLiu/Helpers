@@ -23,6 +23,7 @@ namespace Opportunity.Helpers.ObjectModel
         /// <param name="value">Value in the box.</param>
         public ReadOnlyBox(T value) => this.BoxedValue = value;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private T value;
         /// <summary>
         /// Actual value in the box.
