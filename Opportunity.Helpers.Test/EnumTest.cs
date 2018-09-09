@@ -63,6 +63,28 @@ namespace Opportunity.Helpers.Test
         }
 
         [TestMethod]
+        public void EnumToUlongNonGeneric()
+        {
+            Assert.AreEqual(0ul, ((Enum)Tbyte.D).ToUInt64());
+            Assert.AreEqual(0ul, ((Enum)Tsbyte.D).ToUInt64());
+            Assert.AreEqual(0ul, ((Enum)Tint.D).ToUInt64());
+            Assert.AreEqual(0ul, ((Enum)Tuint.D).ToUInt64());
+            Assert.AreEqual(0ul, ((Enum)Tlong.D).ToUInt64());
+            Assert.AreEqual(0ul, ((Enum)Tulong.D).ToUInt64());
+
+            Assert.AreEqual(1ul, ((Enum)Tbyte.P).ToUInt64());
+            Assert.AreEqual(1ul, ((Enum)Tsbyte.P).ToUInt64());
+            Assert.AreEqual(1ul, ((Enum)Tint.P).ToUInt64());
+            Assert.AreEqual(1ul, ((Enum)Tuint.P).ToUInt64());
+            Assert.AreEqual(1ul, ((Enum)Tlong.P).ToUInt64());
+            Assert.AreEqual(1ul, ((Enum)Tulong.P).ToUInt64());
+
+            Assert.AreEqual(ulong.MaxValue, ((Enum)Tsbyte.N).ToUInt64());
+            Assert.AreEqual(ulong.MaxValue, ((Enum)Tint.N).ToUInt64());
+            Assert.AreEqual(ulong.MaxValue, ((Enum)Tlong.N).ToUInt64());
+        }
+
+        [TestMethod]
         public void UlongToEnum()
         {
             Assert.AreEqual(Tbyte.D, 0ul.ToEnum<Tbyte>());
@@ -85,7 +107,7 @@ namespace Opportunity.Helpers.Test
         }
 
         [TestMethod]
-        public void IsDefinedTest()
+        public void IsDefined()
         {
             Assert.IsTrue(Tbyte.D.IsDefined());
             Assert.IsTrue(Tsbyte.D.IsDefined());
@@ -104,6 +126,28 @@ namespace Opportunity.Helpers.Test
             Assert.IsTrue(Tsbyte.N.IsDefined());
             Assert.IsTrue(Tint.N.IsDefined());
             Assert.IsTrue(Tlong.N.IsDefined());
+        }
+
+        [TestMethod]
+        public void IsDefinedNonGeneric()
+        {
+            Assert.IsTrue(((Enum)Tbyte.D).IsDefined());
+            Assert.IsTrue(((Enum)Tsbyte.D).IsDefined());
+            Assert.IsTrue(((Enum)Tint.D).IsDefined());
+            Assert.IsTrue(((Enum)Tuint.D).IsDefined());
+            Assert.IsTrue(((Enum)Tlong.D).IsDefined());
+            Assert.IsTrue(((Enum)Tulong.D).IsDefined());
+
+            Assert.IsTrue(((Enum)Tbyte.P).IsDefined());
+            Assert.IsTrue(((Enum)Tsbyte.P).IsDefined());
+            Assert.IsTrue(((Enum)Tint.P).IsDefined());
+            Assert.IsTrue(((Enum)Tuint.P).IsDefined());
+            Assert.IsTrue(((Enum)Tlong.P).IsDefined());
+            Assert.IsTrue(((Enum)Tulong.P).IsDefined());
+
+            Assert.IsTrue(((Enum)Tsbyte.N).IsDefined());
+            Assert.IsTrue(((Enum)Tint.N).IsDefined());
+            Assert.IsTrue(((Enum)Tlong.N).IsDefined());
         }
     }
 }
