@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -13,10 +15,33 @@ namespace System
     /// </summary>
     public static class EnumExtension
     {
-        internal static class EnumExtentionCache<T>
+        internal interface IEnumExtentionCache
+        {
+            Type TType { get; }
+            TypeCode TTypeCode { get; }
+            Type TUnderlyingType { get; }
+            bool IsFlag { get; }
+
+            string[] Names { get; }
+            Enum[] Values { get; }
+            ulong[] UInt64Values { get; }
+
+            int GetIndex(Enum that);
+            string ToFriendlyNameString(Enum that, Func<string, string> nameProvider);
+            string ToFriendlyNameString(Enum that, Func<Enum, string> nameProvider);
+        }
+
+        internal sealed class EnumExtentionCache<T> : IEnumExtentionCache
             where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
+            public static readonly EnumExtentionCache<T> Instance;
             static EnumExtentionCache()
+            {
+                Instance = new EnumExtentionCache<T>();
+                EnumExtentionDic[typeof(T)] = Instance;
+            }
+
+            private EnumExtentionCache()
             {
                 TType = typeof(T);
                 TTypeCode = default(T).GetTypeCode();
@@ -44,52 +69,44 @@ namespace System
                 }
             }
 
-            public static readonly Type TType;
-            public static readonly TypeCode TTypeCode;
-            public static readonly Type TUnderlyingType;
-            public static readonly bool IsFlag;
+            public Type TType { get; }
+            public TypeCode TTypeCode { get; }
+            public Type TUnderlyingType { get; }
+            public bool IsFlag { get; }
 
-            public static readonly string[] Names;
-            public static readonly T[] Values;
-            public static readonly ulong[] UInt64Values;
+            public string[] Names { get; }
+            public T[] Values { get; }
+            public ulong[] UInt64Values { get; }
+
+            private Enum[] boxedValues;
+            Enum[] IEnumExtentionCache.Values => LazyInitializer.EnsureInitialized(ref this.boxedValues, () =>
+            {
+                var v = new Enum[Values.Length];
+                for (var i = 0; i < Values.Length; i++)
+                {
+                    v[i] = Values[i];
+                }
+                return v;
+            });
 
             private const string enumSeperator = ", ";
 
-            public static ulong ToUInt64(T value)
-            {
-                ulong result = 0;
-                switch (TTypeCode)
-                {
-                case TypeCode.SByte:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                    result = (ulong)Convert.ToInt64(value, Globalization.CultureInfo.InvariantCulture);
-                    break;
-
-                case TypeCode.Byte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Boolean:
-                case TypeCode.Char:
-                    result = Convert.ToUInt64(value, Globalization.CultureInfo.InvariantCulture);
-                    break;
-                }
-                return result;
-            }
-
-            public static string ToFriendlyNameString(T that, Func<string, string> nameProvider)
+            public string ToFriendlyNameString(T that, Func<string, string> nameProvider)
             {
                 return ToFriendlyNameString(that, i => nameProvider(Names[i]));
             }
 
-            public static string ToFriendlyNameString(T that, Func<T, string> nameProvider)
+            public string ToFriendlyNameString(T that, Func<T, string> nameProvider)
             {
                 return ToFriendlyNameString(that, i => nameProvider(Values[i]));
             }
 
-            private static string ToFriendlyNameString(T that, Func<int, string> nameProvider)
+            public int GetIndex(T that)
+            {
+                return Array.IndexOf(Values, that);
+            }
+
+            private string ToFriendlyNameString(T that, Func<int, string> nameProvider)
             {
                 var idx = GetIndex(that);
                 if (idx >= 0)
@@ -100,12 +117,7 @@ namespace System
                     return ToFriendlyNameStringForFlagsFormat(that, nameProvider);
             }
 
-            public static int GetIndex(T that)
-            {
-                return Array.IndexOf(Values, that);
-            }
-
-            private static string ToFriendlyNameStringForFlagsFormat(T that, Func<int, string> nameProvider)
+            private string ToFriendlyNameStringForFlagsFormat(T that, Func<int, string> nameProvider)
             {
                 var result = ToUInt64(that);
 
@@ -150,6 +162,26 @@ namespace System
                 else
                     return retval.ToString(); // Return the string representation
             }
+
+            int IEnumExtentionCache.GetIndex(Enum that)
+                => GetIndex((T)that);
+            string IEnumExtentionCache.ToFriendlyNameString(Enum that, Func<string, string> nameProvider)
+                => ToFriendlyNameString((T)that, nameProvider);
+            string IEnumExtentionCache.ToFriendlyNameString(Enum that, Func<Enum, string> nameProvider)
+                => ToFriendlyNameString((T)that, v => nameProvider(v));
+        }
+
+        internal static readonly Dictionary<Type, IEnumExtentionCache> EnumExtentionDic = new Dictionary<Type, IEnumExtentionCache>();
+
+        private static IEnumExtentionCache getForType(Type t)
+        {
+            if (!EnumExtentionDic.TryGetValue(t, out var value))
+            {
+                var cachet = typeof(EnumExtentionCache<>).MakeGenericType(t);
+                RuntimeHelpers.RunClassConstructor(cachet.TypeHandle);
+                value = EnumExtentionDic[t];
+            }
+            return value;
         }
 
         /// <summary>
@@ -160,8 +192,8 @@ namespace System
         public static IEnumerable<KeyValuePair<string, T>> GetDefinedValues<T>()
             where T : struct, Enum, IComparable, IConvertible, IFormattable
         {
-            var names = EnumExtentionCache<T>.Names;
-            var values = EnumExtentionCache<T>.Values;
+            var names = EnumExtentionCache<T>.Instance.Names;
+            var values = EnumExtentionCache<T>.Instance.Values;
             for (var i = 0; i < names.Length; i++)
             {
                 yield return new KeyValuePair<string, T>(names[i], values[i]);
@@ -175,9 +207,7 @@ namespace System
         /// <returns>Underlying type of the enum.</returns>
         public static Type GetUnderlyingType<T>()
             where T : struct, Enum, IComparable, IConvertible, IFormattable
-        {
-            return EnumExtentionCache<T>.TUnderlyingType;
-        }
+            => EnumExtentionCache<T>.Instance.TUnderlyingType;
 
         /// <summary>
         /// Check whether the enum is flag.
@@ -186,8 +216,49 @@ namespace System
         /// <returns><see langword="true"/> if is flag.</returns>
         public static bool IsFlag<T>()
             where T : struct, Enum, IComparable, IConvertible, IFormattable
+            => EnumExtentionCache<T>.Instance.IsFlag;
+
+        /// <summary>
+        /// Check whether the enum is flag.
+        /// </summary>
+        /// <param name="enumType">Type of enum.</param>
+        /// <returns><see langword="true"/> if is flag.</returns>
+        public static bool IsFlag(Type enumType)
         {
-            return EnumExtentionCache<T>.IsFlag;
+            if (enumType is null)
+                throw new ArgumentNullException(nameof(enumType));
+            try
+            {
+                var i = getForType(enumType);
+                return i.IsFlag;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException("enumType is not a valid enum type.", ex);
+            }
+        }
+
+        private static ulong toUInt64(Enum value)
+        {
+            var v = (IConvertible)value;
+            switch (v.GetTypeCode())
+            {
+            case TypeCode.SByte:
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+            case TypeCode.Int64:
+                return unchecked((ulong)v.ToInt64(Globalization.CultureInfo.InvariantCulture));
+
+            case TypeCode.Byte:
+            case TypeCode.UInt16:
+            case TypeCode.UInt32:
+            case TypeCode.UInt64:
+            case TypeCode.Boolean:
+            case TypeCode.Char:
+                return v.ToUInt64(Globalization.CultureInfo.InvariantCulture);
+            }
+            throw new ArgumentException("Can't convert.");
         }
 
         /// <summary>
@@ -197,53 +268,19 @@ namespace System
         /// <returns><see cref="ulong"/> equivalent of <paramref name="that"/>.</returns>
         public static ulong ToUInt64<T>(this T that)
             where T : struct, Enum, IComparable, IConvertible, IFormattable
-        {
-            switch (that.GetTypeCode())
-            {
-            case TypeCode.SByte:
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-                return unchecked((ulong)that.ToInt64(Globalization.CultureInfo.InvariantCulture));
-
-            case TypeCode.Byte:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Boolean:
-            case TypeCode.Char:
-                return that.ToUInt64(Globalization.CultureInfo.InvariantCulture);
-            }
-            throw new ArgumentException("Can't convert.");
-        }
+            => toUInt64(that);
 
         /// <summary>
         /// Convert an enum value to its <see cref="ulong"/> equivalent.
         /// </summary>
         /// <param name="that">Value to convert.</param>
         /// <returns><see cref="ulong"/> equivalent of <paramref name="that"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="that"/> is <see langword="null"/>.</exception>
         public static ulong ToUInt64(this Enum that)
         {
-            if (that == null)
+            if (that is null)
                 throw new ArgumentNullException(nameof(that));
-            var c = (IConvertible)that;
-            switch (c.GetTypeCode())
-            {
-            case TypeCode.SByte:
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-                return unchecked((ulong)c.ToInt64(Globalization.CultureInfo.InvariantCulture));
-
-            case TypeCode.Byte:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Boolean:
-            case TypeCode.Char:
-                return c.ToUInt64(Globalization.CultureInfo.InvariantCulture);
-            }
-            throw new ArgumentException("Can't convert.");
+            return toUInt64(that);
         }
 
         /// <summary>
@@ -265,10 +302,30 @@ namespace System
         /// <param name="that">Enum value.</param>
         /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
         /// <returns>String representaion of enum value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="nameProvider"/> is <see langword="null"/>.</exception>
         public static string ToFriendlyNameString<T>(this T that, Func<T, string> nameProvider)
             where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
-            return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
+            if (nameProvider is null)
+                throw new ArgumentNullException(nameof(nameProvider));
+            return EnumExtentionCache<T>.Instance.ToFriendlyNameString(that, nameProvider);
+        }
+
+        /// <summary>
+        /// Get string representaion of enum value.
+        /// </summary>
+        /// <param name="that">Enum value.</param>
+        /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
+        /// <returns>String representaion of enum value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="that"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="nameProvider"/> is <see langword="null"/>.</exception>
+        public static string ToFriendlyNameString(this Enum that, Func<Enum, string> nameProvider)
+        {
+            if (nameProvider is null)
+                throw new ArgumentNullException(nameof(nameProvider));
+            if (that is null)
+                throw new ArgumentNullException(nameof(that));
+            return getForType(that.GetType()).ToFriendlyNameString(that, nameProvider);
         }
 
         /// <summary>
@@ -278,10 +335,30 @@ namespace System
         /// <param name="that">Enum value.</param>
         /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
         /// <returns>String representaion of enum value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="nameProvider"/> is <see langword="null"/>.</exception>
         public static string ToFriendlyNameString<T>(this T that, Func<string, string> nameProvider)
             where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
-            return EnumExtentionCache<T>.ToFriendlyNameString(that, nameProvider);
+            if (nameProvider is null)
+                throw new ArgumentNullException(nameof(nameProvider));
+            return EnumExtentionCache<T>.Instance.ToFriendlyNameString(that, nameProvider);
+        }
+
+        /// <summary>
+        /// Get string representaion of enum value.
+        /// </summary>
+        /// <param name="that">Enum value.</param>
+        /// <param name="nameProvider">Name provider provides names of defined enum values.</param>
+        /// <returns>String representaion of enum value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="that"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="nameProvider"/> is <see langword="null"/>.</exception>
+        public static string ToFriendlyNameString(this Enum that, Func<string, string> nameProvider)
+        {
+            if (nameProvider is null)
+                throw new ArgumentNullException(nameof(nameProvider));
+            if (that is null)
+                throw new ArgumentNullException(nameof(that));
+            return getForType(that.GetType()).ToFriendlyNameString(that, nameProvider);
         }
 
         /// <summary>
@@ -293,7 +370,20 @@ namespace System
         public static bool IsDefined<T>(this T that)
             where T : struct, Enum, IComparable, IFormattable, IConvertible
         {
-            return EnumExtentionCache<T>.GetIndex(that) >= 0;
+            return EnumExtentionCache<T>.Instance.GetIndex(that) >= 0;
+        }
+
+        /// <summary>
+        /// Check whether the enum is defined.
+        /// </summary>
+        /// <param name="that">Enum value to check.</param>
+        /// <returns><see langword="true"/> if is defined.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="that"/> is <see langword="null"/>.</exception>
+        public static bool IsDefined(this Enum that)
+        {
+            if (that is null)
+                throw new ArgumentNullException(nameof(that));
+            return Enum.IsDefined(that.GetType(), that);
         }
     }
 }
