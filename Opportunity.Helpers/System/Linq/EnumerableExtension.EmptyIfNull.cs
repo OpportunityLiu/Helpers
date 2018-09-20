@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace System.Linq
 {
-    partial class EnumerableExtension
+    public partial class EnumerableExtension
     {
         /// <summary>
         /// Check the <paramref name="collection"/> is <see langword="null"/> or not.
@@ -31,6 +31,15 @@ namespace System.Linq
         /// <returns>An empty collcetion if the <paramref name="collection"/> is <see langword="null"/>, otherwise, the <paramref name="collection"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IList<T> EmptyIfNull<T>(this IList<T> collection)
+            => collection ?? Array.Empty<T>();
+
+        /// <summary>
+        /// Check the <paramref name="collection"/> is <see langword="null"/> or not.
+        /// </summary>
+        /// <param name="collection">Collection to check.</param>
+        /// <returns>An empty collcetion if the <paramref name="collection"/> is <see langword="null"/>, otherwise, the <paramref name="collection"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] EmptyIfNull<T>(this T[] collection)
             => collection ?? Array.Empty<T>();
 
         /// <summary>
