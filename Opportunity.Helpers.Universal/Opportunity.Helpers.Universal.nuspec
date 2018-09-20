@@ -13,8 +13,8 @@
     <tags>UWP helper</tags>
     <dependencies>
       <group targetFramework="uap10.0">
-        <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="5.4.2" />
-        <dependency id="System.Threading.Tasks.Extensions" version="4.4.0" />
+        <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="6.1.7" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.1" />
         <dependency id="Opportunity.Helpers" version="$version$" />
       </group>
     </dependencies>
