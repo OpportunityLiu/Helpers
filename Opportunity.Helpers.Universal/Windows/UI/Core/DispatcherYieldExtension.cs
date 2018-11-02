@@ -46,7 +46,7 @@ namespace Windows.UI.Core
     /// Awaiter source for methods in <see cref="DispatcherExtension"/>.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public struct DispatcherYieldAwaiterSource
+    public readonly struct DispatcherYieldAwaiterSource
     {
         internal DispatcherYieldAwaiterSource(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
@@ -71,7 +71,7 @@ namespace Windows.UI.Core
     /// Awaiter of <see cref="DispatcherYieldAwaiterSource"/>.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public struct DispatcherYieldAwaiter : INotifyCompletion
+    public readonly struct DispatcherYieldAwaiter : INotifyCompletion
     {
         private readonly CoreDispatcher dispatcher;
         private readonly CoreDispatcherPriority priority;
@@ -86,7 +86,7 @@ namespace Windows.UI.Core
         /// The awaiter is completed or not, for yield awaiter whose <see cref="CoreDispatcher"/> is not <see langword="null"/>,
         /// will always returns <see langword="false"/>.
         /// </summary>
-        public bool IsCompleted => this.dispatcher == null;
+        public bool IsCompleted => this.dispatcher is null;
 
         /// <summary>
         /// Get result of the awaiter, for yield awaiter, will do nothing.
@@ -99,7 +99,7 @@ namespace Windows.UI.Core
         /// <param name="continuation">the action to invoke when the operation completes</param>
         public void OnCompleted(Action continuation)
         {
-            if (this.dispatcher == null)
+            if (this.dispatcher is null)
             {
                 continuation();
                 return;
